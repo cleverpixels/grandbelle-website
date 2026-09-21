@@ -1,0 +1,58 @@
+{
+  "services": [
+    {
+      "id": "air-freight",
+      "title": "Air Freight",
+      "summary": "Fast air freight for urgent cargo, packages, and international deliveries from the United States to Nigeria and West Africa.",
+      "transit": "7 to 10 business days",
+      "transitVariant": "info",
+      "image": "/images/air-freight-3x2.jpg",
+      "imageAlt": "Cargo being loaded onto a freighter aircraft at an airport terminal"
+    },
+    {
+      "id": "ocean-freight",
+      "title": "Ocean Freight",
+      "summary": "Reliable sea freight for bulk cargo, large consignments, and cost effective shipping.",
+      "transit": "4 to 6 weeks",
+      "transitVariant": "info",
+      "image": "/images/ocean-freight-3x2.jpg",
+      "imageAlt": "A container ship docked at the Port of Oakland"
+    },
+    {
+      "id": "customs-clearance",
+      "title": "Customs Clearance",
+      "summary": "Clearance support that moves cargo through import and export requirements with fewer delays.",
+      "transit": "Included on both routes",
+      "transitVariant": "success",
+      "image": "/images/customs-clearance-3x2.jpg",
+      "imageAlt": "A port worker inspecting stacked freight containers"
+    },
+    {
+      "id": "auto-shipping",
+      "title": "Auto Shipping",
+      "summary": "Secure vehicle shipping for cars moving from the United States to Nigeria and other countries.",
+      "transit": "3 to 5 weeks",
+      "transitVariant": "info",
+      "image": "/images/auto-shipping-3x2.jpg",
+      "imageAlt": "Rows of cars staged on the quay at a port vehicle terminal"
+    },
+    {
+      "id": "warehousing",
+      "title": "Warehousing",
+      "summary": "Storage, package consolidation, and shipment preparation before the final leg.",
+      "transit": "Held until you release it",
+      "transitVariant": "success",
+      "image": "/images/warehousing-3x2.jpg",
+      "imageAlt": "Warehouse staff sorting pallets and shelving in a distribution warehouse"
+    },
+    {
+      "id": "door-to-door",
+      "title": "Door-to-Door Delivery",
+      "summary": "Collection at the origin address and delivery at the destination address, on both routes.",
+      "transit": "Included on both routes",
+      "transitVariant": "success",
+      "image": "/images/door-to-door-delivery-3x2.jpg",
+      "imageAlt": "A delivery rider carrying a parcel on a motorcycle in Nigeria"
+    }
+  ]
+}

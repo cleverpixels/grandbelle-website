@@ -1,0 +1,11 @@
+# Cloudflare Pages redirects
+# GrandBelle WordPress → Astro migration
+
+# Redirect retired WordPress URLs to new Astro routes
+/about-us/         /about/          301
+/request-a-quote/  /get-a-quote/    301
+/shipping-a-car/   /shipping-a-car/  301
+/our-services/     /#services       301
+/home/             /                301
+/login/           /                301
+/my-account/      /                301

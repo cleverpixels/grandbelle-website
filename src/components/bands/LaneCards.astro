@@ -1,0 +1,39 @@
+---
+interface LaneCard {
+  eyebrow?: string;
+  title: string;
+  time: string;
+  ticks: string[];
+  estimate: string;
+  estimateNote: string;
+  fastest?: boolean;
+}
+
+interface Props {
+  cards: LaneCard[];
+}
+
+const { cards } = Astro.props;
+---
+
+<div class="grid grid--cards">
+  {cards.map(card => (
+    <article class={`card lane-card${card.fastest ? ' lane-card--fastest' : ''}`}>
+      {card.eyebrow && <p class="eyebrow">{card.eyebrow}</p>}
+      <h3 class="h4">{card.title}</h3>
+      <p class="lane-card__time num">{card.time}</p>
+      <ul class="tick-list">
+        {card.ticks.map(tick => (
+          <li>
+            <span class="tick" aria-hidden="true">&#10003;</span>
+            <span>{tick}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="lane-card__estimate">
+        <p class="lane-card__figure num">{card.estimate}</p>
+        <p class="caption muted">{card.estimateNote}</p>
+      </div>
+    </article>
+  ))}
+</div>

@@ -1,0 +1,55 @@
+---
+interface Props {
+  currentPage?: string;
+}
+const { currentPage = '' } = Astro.props;
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/services/', label: 'Services' },
+  { href: '/about/', label: 'About' },
+  { href: '/get-a-quote/', label: 'Get a quote' },
+];
+---
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/">
+      <img class="brand__emblem" src="/images/grandbelle-emblem-square.png" width="346" height="357" alt="Grandbelle International Inc">
+      <img class="brand__lockup" src="/images/grandbelle-lockup.png" width="1000" height="313" alt="Grandbelle International Inc">
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <ul class="nav__list">
+        {navLinks.map(link => (
+          <li>
+            <a
+              class="nav__link"
+              href={link.href}
+              aria-current={currentPage === link.href ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <span class="nav__spacer"></span>
+    <a class="nav__support" href="tel:+15162565666">Support +1 (516) 256-5666</a>
+    <a class="nav__support" href="#account">Account</a>
+    <a class="btn btn--primary header__action" href="/get-a-quote/">Get a quote</a>
+    <details class="drawer">
+      <summary>Menu</summary>
+      <nav class="drawer__panel" aria-label="Primary, mobile">
+        <ul class="drawer__list">
+          {navLinks.map(link => (
+            <li>
+              <a class="nav__link" href={link.href}>{link.label}</a>
+            </li>
+          ))}
+          <li><a class="nav__link" href="tel:+15162565666">Support +1 (516) 256-5666</a></li>
+          <li><a class="nav__link" href="#account">Account</a></li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>

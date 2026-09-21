@@ -1,0 +1,135 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import AnswerBand from '../components/bands/AnswerBand.astro';
+import ReviewsBand from '../components/bands/ReviewsBand.astro';
+import LaneCards from '../components/bands/LaneCards.astro';
+import '../styles/global.css';
+
+const laneCards = [
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: '3 to 5 days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value'], estimate: 'Sample US$430', estimateNote: '40 kg to Lagos. Sample figure for design review.', fastest: true },
+  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value'], estimate: 'Sample US$285', estimateNote: '40 kg to Lagos. Sample figure for design review.' },
+  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Charged by volume rather than by weight'], estimate: 'Sample US$340', estimateNote: 'One cubic metre to Lagos. Sample figure for design review.' },
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Grandbelle International Inc | Two offices, one corridor</title>
+  <meta name="description" content="Grandbelle International Inc has worked the United States to Nigeria and West Africa corridor for more than twenty years, with one office at the origin and one at the destination.">
+  <link rel="preconnect" href="/fonts/roboto-slab-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preconnect" href="/fonts/roboto-400-500-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <script is:inline src="https://embed.tawk.to/6aa967c3d1963a3449b3b83e/default" async></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <Header currentPage="/about/" />
+  <main id="main">
+    <AnswerBand
+      eyebrow="About Grandbelle International Inc"
+      heading="Two offices, one corridor, and the same two sets of names on the paperwork."
+      lead="Grandbelle International Inc moves cargo from the United States to Nigeria and West Africa, door to door, and has done it for more than twenty years."
+      facts={[
+        { label: 'How much', figure: 'Four fields', description: 'Destination, quantity, weight, and value return an estimate.' },
+        { label: 'How long', figure: '7 to 10 days', description: 'Business days by air, door to door. Indicative.' },
+        { label: 'Where is it now', figure: 'One field', description: 'Status without an account and without a call.', highlight: true },
+      ]}
+    />
+    <section class="band">
+      <div class="wrap band__inner">
+        <div class="grid grid--split">
+          <div class="stack stack--wide">
+            <div class="stack">
+              <h2 class="h2">Who does the carrying</h2>
+              <p class="muted">Most consignments on this corridor are sent by people rather than by procurement departments. A family sending goods home. A trader restocking a shop. Someone moving a car across the Atlantic. Those senders do not want to assemble a supply chain out of a forwarder, a customs broker, and a delivery company. They want one company that answers the telephone, takes the consignment, and says when it will arrive.</p>
+              <p class="muted">That is the shape Grandbelle has been built to have. The consignment is received at the New York warehouse, consolidated with anything else going the same way, documented for export, carried, cleared on arrival in Lagos, and delivered to a named address. One reference number covers all of it, and the same two offices are responsible at each end.</p>
+            </div>
+            <div class="stack">
+              <h2 class="h2">What that means in practice</h2>
+              <p class="muted">It means the answer to "where is it now" is a status rather than a person's recollection. It means the answer to "how much" arrives before a payment and before an account. It means the answer to "how long" is printed on the page rather than promised on a call. None of that is a technology problem. The live site already has a login, a cargo manager, and a working tracking form. The problem is that none of them is where a visitor meets them.</p>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="media media--square">
+              <p class="media__note">Portrait placeholder<br>Client photography to supply</p>
+            </div>
+            <p class="caption muted">The two current hero images on the live site are unrecoverable vendor demo files. New imagery is required.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="band band--surface">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">The company in four numbers</h2>
+          <p class="muted">Each figure is published by the client on their own site today.</p>
+        </div>
+        <div class="grid grid--steps">
+          <div class="card">
+            <p class="fact__figure num">23+</p>
+            <p class="card__body">Years working the United States to Nigeria corridor, through several changes of carrier and customs regime.</p>
+          </div>
+          <div class="card">
+            <p class="fact__figure num">55K+</p>
+            <p class="card__body">Consignments moved, from single packages to full containers and vehicles.</p>
+          </div>
+          <div class="card">
+            <p class="fact__figure num">2</p>
+            <p class="card__body">Offices, one at each end of the route, so a consignment is handed over twice by the same company.</p>
+          </div>
+          <div class="card">
+            <p class="fact__figure num">6</p>
+            <p class="card__body">Services, air freight through to the final delivery, run as one chain rather than six vendors.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="band band--surface" id="rates">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">Service levels on this corridor</h2>
+          <p class="muted measure">Fastest first. Every card carries the window, whether tracking is included, and how insurance is calculated. Figures are samples in United States dollars.</p>
+        </div>
+        <LaneCards cards={laneCards} />
+        <div class="alert alert--attention">
+          <p class="label">Sample figures for design review</p>
+          <p>Every figure on this page is a stand-in so the layout can be judged, and every figure is in United States dollars. The live figures come from the client rate card.</p>
+        </div>
+      </div>
+    </section>
+    <section class="band">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">Where we are</h2>
+          <p class="muted">Origin and destination. Both addresses take deliveries, and both are staffed during business hours.</p>
+        </div>
+        <div class="grid grid--cards">
+          <div class="card">
+            <h3 class="h4">Valley Stream, New York</h3>
+            <p class="card__body">Airport Industrial Office Park, 145 Hook Creek Blvd, B6A, Valley Stream, NY 11581, United States.</p>
+            <p class="card__meta">Receiving, consolidation, export clearance</p>
+          </div>
+          <div class="card">
+            <h3 class="h4">Ikeja, Lagos</h3>
+            <p class="card__body">21 Toyin Street, Ikeja, Lagos, Nigeria.<br><a href="tel:+2348035137916">+234 803 513 7916</a></p>
+            <p class="card__meta">Import clearance, final leg, collection</p>
+          </div>
+          <div class="card">
+            <h3 class="h4">Contact</h3>
+            <p class="card__body"><a href="tel:+15162565666">+1 (516) 256-5666</a><br><a href="https://wa.me/13477128862">WhatsApp +1 (347) 712-8862</a><br><a href="mailto:info2@grandbelleinternational.com">info2@grandbelleinternational.com</a></p>
+            <p class="card__meta">Support, WhatsApp, and email</p>
+          </div>
+        </div>
+        <div class="btn-row" style="margin-top: 32px;">
+          <a class="btn btn--primary" href="/get-a-quote/">Get a quote</a>
+          <a class="btn btn--secondary" href="/services/">See the services</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</body>
+</html>

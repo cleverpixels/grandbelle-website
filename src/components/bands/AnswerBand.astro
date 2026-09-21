@@ -1,0 +1,61 @@
+---
+interface Props {
+  eyebrow: string;
+  heading: string;
+  lead: string;
+  facts: {
+    label: string;
+    figure: string;
+    description: string;
+    highlight?: boolean;
+  }[];
+  showTracking?: boolean;
+  showQuotePrompt?: boolean;
+}
+const { eyebrow, heading, lead, facts, showTracking = true, showQuotePrompt = false } = Astro.props;
+---
+
+<section class="answerband" aria-label="How much, how long, and where is it now">
+  <div class="wrap answerband__inner">
+    <div class="stack stack--wide answerband__text">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1 class="h1">{heading}</h1>
+      <div class="answerband__facts">
+        {facts.map(fact => (
+          <div class={`fact${fact.highlight ? ' fact--now' : ''}`}>
+            <p class="caption">{fact.label}</p>
+            <p class="fact__figure num">{fact.figure}</p>
+            <p class="fact__label body-sm">{fact.description}</p>
+          </div>
+        ))}
+      </div>
+      <p class="lead">{lead}</p>
+    </div>
+
+    <div class="answerband__card">
+      {showTracking && (
+        <form class="stack" method="get" action="#tracking" role="search">
+          <label class="field__label" for="tracking-home">Track your shipment</label>
+          <div class="form-row">
+            <div class="field">
+              <input class="input" id="tracking-home" name="tracking" type="text" autocomplete="off" placeholder="Enter your tracking number" aria-describedby="tracking-help-home">
+            </div>
+            <button class="btn btn--primary" type="submit">Track</button>
+          </div>
+          <p class="field__help" id="tracking-help-home">The number is on the receipt we send when a consignment is received. No login.</p>
+        </form>
+      )}
+      {showQuotePrompt && (
+        <div class="stack stack--tight">
+          <p class="label">Price a consignment</p>
+          <p class="body-sm muted">Air, express, sea, or a vehicle. One estimate, labelled as one.</p>
+          <a class="btn btn--secondary" href="/get-a-quote/">Price my consignment</a>
+        </div>
+      )}
+      <div class="stack stack--tight">
+        <p class="label">Prefer to talk</p>
+        <p class="body-sm"><a href="tel:+15162565666">Support +1 (516) 256-5666</a></p>
+      </div>
+    </div>
+  </div>
+</section>

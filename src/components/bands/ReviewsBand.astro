@@ -1,0 +1,39 @@
+---
+const reviews = [
+  { text: 'I have shipped with Grandbelle for years and they are the most efficient group to work with. I would recommend them 100 percent.', attribution: 'Customer review' },
+  { text: 'I have been shipping with Grandbelle for over a decade, and they have never disappointed. I will highly recommend them.', attribution: 'Customer review' },
+  { text: 'Super happy with the services and the professionalism. Keep up the good work.', attribution: 'Customer review' },
+];
+---
+
+<section class="band band--navy">
+  <div class="wrap band__inner">
+    <div class="stack stack--tight">
+      <p class="eyebrow">Grandbelle International</p>
+      <h2 class="h2">Sent by people, to people</h2>
+      <p class="muted measure">Reviews the client already publishes, and the two figures they already state.</p>
+    </div>
+    <div class="grid grid--cards">
+      {reviews.map(r => (
+        <blockquote class="card">
+          <p class="card__body">{r.text}</p>
+          <p class="card__meta">{r.attribution}</p>
+        </blockquote>
+      ))}
+    </div>
+    <ul class="stat-row">
+      <li>
+        <span class="stat__figure num">23+</span>
+        <span class="stat__label body-sm">Years on the corridor</span>
+      </li>
+      <li>
+        <span class="stat__figure num">55K+</span>
+        <span class="stat__label body-sm">Consignments moved</span>
+      </li>
+      <li>
+        <span class="stat__figure num">Two</span>
+        <span class="stat__label body-sm">Offices, origin and destination</span>
+      </li>
+    </ul>
+  </div>
+</section>

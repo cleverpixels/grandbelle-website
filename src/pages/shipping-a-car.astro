@@ -1,0 +1,150 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import AnswerBand from '../components/bands/AnswerBand.astro';
+import LaneCards from '../components/bands/LaneCards.astro';
+import ReviewsBand from '../components/bands/ReviewsBand.astro';
+import '../styles/global.css';
+
+const laneCards = [
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: '3 to 5 days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value'], estimate: 'Sample US$430', estimateNote: '40 kg to Lagos. Sample figure for design review.', fastest: true },
+  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Tracking included', 'Insurance at 2 percent of declared value'], estimate: 'Sample US$1,150', estimateNote: 'Saloon car to Lagos. Sample figure for design review.' },
+  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Charged by volume rather than by weight'], estimate: 'Sample US$340', estimateNote: 'One cubic metre to Lagos. Sample figure for design review.' },
+];
+
+const faqs = [
+  { q: 'Can a vehicle that does not run be shipped?', a: 'Yes, with notice at booking. A non-running vehicle needs different loading and is quoted individually rather than from the estimator.' },
+  { q: 'Is duty included in the estimate?', a: 'No. The estimate covers carriage, handling, and clearance work. Duty assessed at the destination is itemised separately before release, on the declared value.' },
+  { q: 'How is the vehicle insured?', a: 'At 2 percent of the declared value for auto shipping, against 1 percent for general cargo, because the value is higher and the handling is different.' },
+  { q: 'Can personal effects travel with the vehicle?', a: 'Some items can, and some cannot, and the rule depends on the destination. Send the list with the vehicle details and we will confirm before the consignment is collected.' },
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shipping a car from the United States to Nigeria | Grandbelle International Inc</title>
+  <meta name="description" content="Auto shipping from the United States to Nigeria and West Africa: 3 to 5 weeks, collected from the origin address, tracking included, clearance and delivery handled at both ends.">
+  <link rel="preconnect" href="/fonts/roboto-slab-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preconnect" href="/fonts/roboto-400-500-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <script is:inline src="https://embed.tawk.to/6aa967c3d1963a3449b3b83e/default" async></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <Header currentPage="/shipping-a-car/" />
+  <main id="main">
+    <AnswerBand
+      eyebrow="Services · Auto shipping"
+      heading="A car, collected in the United States and delivered in West Africa."
+      lead="Auto shipping runs on the sea route. The vehicle is collected from the address you keep it at, loaded under its own documentation, and cleared and delivered at the far end."
+      facts={[
+        { label: 'How much', figure: 'Quoted', description: 'Per vehicle, because size, running condition, and destination all move the figure.' },
+        { label: 'How long', figure: '3 to 5 weeks', description: 'Door to door by sea. Indicative and confirmed with your quote.' },
+        { label: 'Where is it now', figure: 'One field', description: 'The same tracking number as any other consignment, no account needed.', highlight: true },
+      ]}
+      showQuotePrompt={true}
+    />
+    <section class="band">
+      <div class="wrap band__inner">
+        <div class="media media--wide">
+          <p class="media__note">Photography placeholder, vehicle loading<br>Client photography to supply</p>
+        </div>
+        <div class="grid grid--split">
+          <article class="stack stack--wide">
+            <div class="stack">
+              <h2 class="h2">What the service covers</h2>
+              <p class="muted">Auto shipping on this corridor is a sea service with a door-to-door shape. The vehicle is collected from the address where it is kept, checked against the documentation you provide, and loaded for the crossing. On arrival it is cleared with the rest of the consignment and driven or transported to the delivery address.</p>
+              <p class="muted">Two things decide the figure: the vehicle itself, and where it is going. A saloon car occupies a predictable amount of deck space, which makes it quotable per unit. A larger vehicle, or one that does not run, needs different handling and is quoted individually. The destination matters as much as the vehicle, because the final leg is priced from Lagos outward.</p>
+            </div>
+            <div class="stack">
+              <h2 class="h2">What we need from you</h2>
+              <ul class="tick-list">
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>The pickup address and a contact at that address</span></li>
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>The make, model, year, and whether the vehicle runs</span></li>
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>The title or the export documentation for the vehicle</span></li>
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>The declared value, which insurance is calculated from</span></li>
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>The delivery address and a contact at the far end</span></li>
+              </ul>
+            </div>
+            <div class="stack">
+              <h2 class="h2">Duties and taxes at the destination</h2>
+              <p class="muted">Duty is assessed on the vehicle at the destination, on the declared value and the vehicle's characteristics. It is not part of the carriage figure and it is not included in the estimate. The Lagos office itemises what is payable before the vehicle is released, so there is no figure that appears after the fact.</p>
+              <div class="alert">
+                <p class="label">What the estimate is, and is not</p>
+                <p>The figure returned by the estimator is an estimate, and the output says so. It covers carriage, handling, and clearance work. It does not cover duty, and it is not a quote. The confirmed figure comes from the office before anything is charged.</p>
+              </div>
+            </div>
+          </article>
+          <aside class="stack stack--wide">
+            <div class="card">
+              <h2 class="h4">At a glance</h2>
+              <ul class="tick-list">
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>3 to 5 weeks door to door, indicative</span></li>
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>Collected from the origin address</span></li>
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>Insurance at 2 percent of declared value</span></li>
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>Clearance handled in Lagos</span></li>
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>Tracking included, no account required</span></li>
+              </ul>
+            </div>
+            <div class="card">
+              <h2 class="h4">Tracking status words</h2>
+              <p class="body-sm muted">The same six statuses apply to a vehicle as to a package.</p>
+              <ul class="footer__list body-sm">
+                <li>Received</li>
+                <li>Processed</li>
+                <li>In transit</li>
+                <li>Clearance</li>
+                <li>Out for delivery</li>
+                <li>Delivered</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h2 class="h4">Other services</h2>
+              <ul class="footer__list body-sm">
+                <li><a href="/#services">Air freight</a></li>
+                <li><a href="/#services">Ocean freight</a></li>
+                <li><a href="/#services">Customs clearance</a></li>
+                <li><a href="/#services">Warehousing and consolidation</a></li>
+                <li><a href="/#services">Door-to-door delivery</a></li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+    <section class="band band--surface" id="rates">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">Service levels on this corridor</h2>
+          <p class="muted measure">Fastest first. Every card carries what does not change: the window, whether tracking is included, and how insurance is calculated. Figures are samples in United States dollars.</p>
+        </div>
+        <LaneCards cards={laneCards} />
+        <div class="alert alert--attention">
+          <p class="label">Sample figures for design review</p>
+          <p>Every figure on this page is a stand-in so the layout can be judged, and every figure is in United States dollars. The live figures come from the client rate card.</p>
+        </div>
+      </div>
+    </section>
+    <section class="band">
+      <div class="wrap band__inner">
+        <h2 class="h2">Auto shipping questions</h2>
+        <div class="accordion">
+          {faqs.map(faq => (
+            <details class="accordion__item">
+              <summary>{faq.q}</summary>
+              <p class="accordion__panel">{faq.a}</p>
+            </details>
+          ))}
+        </div>
+        <div class="btn-row" style="margin-top: 32px;">
+          <a class="btn btn--primary" href="/get-a-quote/">Get a quote</a>
+          <a class="btn btn--secondary" href="/#services">See all six services</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</body>
+</html>

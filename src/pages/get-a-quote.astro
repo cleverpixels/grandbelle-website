@@ -1,0 +1,125 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import ReviewsBand from '../components/bands/ReviewsBand.astro';
+import LaneCards from '../components/bands/LaneCards.astro';
+import QuoteEstimator from '../components/QuoteEstimator.jsx';
+import '../styles/global.css';
+
+const laneCards = [
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: '3 to 5 days', ticks: ['Insurance at 1 percent of declared value', 'Tracking included'], estimate: 'Sample US$430', estimateNote: '40 kg to Lagos. Sample figure for design review.', fastest: true },
+  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Insurance at 1 percent of declared value', 'Consolidation available', 'Tracking included'], estimate: 'Sample US$285', estimateNote: '40 kg to Lagos. Sample figure for design review.' },
+  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Insurance at 2 percent of declared value', 'Collected from origin address', 'Tracking included'], estimate: 'Sample US$1,150', estimateNote: 'Saloon car to Lagos. Sample figure for design review.' },
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Get a quote | Grandbelle International Inc</title>
+  <meta name="description" content="Price a consignment from the United States to Nigeria and West Africa. Four fields, a figure labelled as an estimate, and no account required.">
+  <link rel="preconnect" href="/fonts/roboto-slab-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preconnect" href="/fonts/roboto-400-500-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <script is:inline src="https://embed.tawk.to/6aa967c3d1963a3449b3b83e/default" async></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <Header currentPage="/get-a-quote/" />
+  <main id="main">
+    <section class="answerband" aria-label="Price a consignment">
+      <div class="wrap answerband__inner">
+        <div class="stack stack--wide answerband__text">
+          <p class="eyebrow">Get a quote</p>
+          <h1 class="h1">Four fields, and a figure <span>labelled as an estimate</span>.</h1>
+          <div class="answerband__facts">
+            <div class="fact">
+              <p class="caption">How long</p>
+              <p class="fact__figure num">7 to 10 days</p>
+              <p class="fact__label body-sm">Business days by air, door to door. 4 to 6 weeks by sea. Indicative.</p>
+            </div>
+            <div class="fact">
+              <p class="caption">Paid when</p>
+              <p class="fact__figure num">On confirmation</p>
+              <p class="fact__label body-sm">Nothing is charged until the figure is confirmed and the consignment is booked.</p>
+            </div>
+            <div class="fact fact--now">
+              <p class="caption">Where is it now</p>
+              <p class="fact__figure num">One field</p>
+              <p class="fact__label body-sm">The same page, once the consignment is on its way. No login.</p>
+            </div>
+          </div>
+          <p class="lead">No account, no payment, and no telephone call required. Enter the consignment and the estimate appears beside it, with the inputs it was calculated from named underneath.</p>
+        </div>
+        <div class="answerband__card">
+          <QuoteEstimator client:load />
+          <form class="stack" method="get" action="#tracking" role="search">
+            <h2 class="h4">Or track a shipment</h2>
+            <div class="form-row">
+              <div class="field">
+                <label class="field__label" for="tracking-quote">Tracking number</label>
+                <input class="input" id="tracking-quote" name="tracking" type="text" autocomplete="off" placeholder="Enter your tracking number" aria-describedby="tracking-help-quote">
+              </div>
+              <button class="btn btn--secondary" type="submit">Track</button>
+            </div>
+            <p class="field__help" id="tracking-help-quote">No account is needed. The number is on the receipt we send when a consignment is received.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">What happens next</h2>
+          <p class="muted measure">Three steps, and the middle one is where the figure stops being an estimate.</p>
+        </div>
+        <div class="grid grid--cards">
+          <div class="card">
+            <p class="eyebrow num">01</p>
+            <h3 class="h4">The estimate appears</h3>
+            <p class="card__body">Beside the form, with the weight, destination, service, and insurance basis it was calculated from named under the figure.</p>
+          </div>
+          <div class="card">
+            <p class="eyebrow num">02</p>
+            <h3 class="h4">We confirm the figure</h3>
+            <p class="card__body">The office confirms the departure, the exact figure, and any duty payable at the destination. Nothing is charged before this.</p>
+          </div>
+          <div class="card">
+            <p class="eyebrow num">03</p>
+            <h3 class="h4">The consignment moves</h3>
+            <p class="card__body">Received at the warehouse, given one tracking number, carried, cleared, and delivered to the address.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band--surface">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">Service levels, fastest first</h2>
+          <p class="muted measure">The same cards the homepage carries. Choose a level here and set the service field above to match. Figures are samples in United States dollars.</p>
+        </div>
+        <LaneCards cards={laneCards} />
+        <div class="alert alert--attention">
+          <p class="label">Sample figures for design review</p>
+          <p>Every figure on this page is a stand-in so the layout can be judged, and every figure is in United States dollars. The live figures come from the client rate card.</p>
+        </div>
+      </div>
+    </section>
+
+    <ReviewsBand />
+
+    <section class="band">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <p class="label">Prefer to speak to someone</p>
+          <p class="body-sm">The telephone and WhatsApp entries sit second to the estimate, not in place of it. <a href="tel:+15162565666">+1 (516) 256-5666</a>.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</body>
+</html>

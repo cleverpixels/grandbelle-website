@@ -1,0 +1,138 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import AnswerBand from '../components/bands/AnswerBand.astro';
+import QuotePromptBand from '../components/bands/QuotePromptBand.astro';
+import ReviewsBand from '../components/bands/ReviewsBand.astro';
+import ServiceCard from '../components/bands/ServiceCard.astro';
+import LaneCards from '../components/bands/LaneCards.astro';
+import '../styles/global.css';
+
+const services = [
+  { title: 'Air Freight', summary: 'Fast air freight for urgent cargo, packages, and international deliveries from the United States to Nigeria and West Africa.', transit: '7 to 10 business days', transitVariant: 'info', image: '/images/air-freight-3x2.jpg', imageAlt: 'Cargo being loaded onto a freighter aircraft at an airport terminal' },
+  { title: 'Ocean Freight', summary: 'Reliable sea freight for bulk cargo, large consignments, and cost effective shipping.', transit: '4 to 6 weeks', transitVariant: 'info', image: '/images/ocean-freight-3x2.jpg', imageAlt: 'A container ship docked at the Port of Oakland' },
+  { title: 'Customs Clearance', summary: 'Clearance support that moves cargo through import and export requirements with fewer delays.', transit: 'Included on both routes', transitVariant: 'success', image: '/images/customs-clearance-3x2.jpg', imageAlt: 'A port worker inspecting stacked freight containers' },
+  { title: 'Auto Shipping', summary: 'Secure vehicle shipping for cars moving from the United States to Nigeria and other countries.', transit: '3 to 5 weeks', transitVariant: 'info', image: '/images/auto-shipping-3x2.jpg', imageAlt: 'Rows of cars staged on the quay at a port vehicle terminal' },
+  { title: 'Warehousing', summary: 'Storage, package consolidation, and shipment preparation before the final leg.', transit: 'Held until you release it', transitVariant: 'success', image: '/images/warehousing-3x2.jpg', imageAlt: 'Warehouse staff sorting pallets in a distribution warehouse' },
+  { title: 'Door-to-Door Delivery', summary: 'Collection at the origin address and delivery at the destination address, on both routes.', transit: 'Included on both routes', transitVariant: 'success', image: '/images/door-to-door-delivery-3x2.jpg', imageAlt: 'A delivery rider carrying a parcel in Nigeria' },
+];
+
+const laneCards = [
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: '3 to 5 days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Clearance and final delivery included'], estimate: 'Sample US$430', estimateNote: '40 kg to Lagos. Sample figure for design review.', fastest: true },
+  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Consolidation of several orders'], estimate: 'Sample US$285', estimateNote: '40 kg to Lagos. Sample figure for design review.' },
+  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Charged by volume rather than by weight'], estimate: 'Sample US$340', estimateNote: 'One cubic metre to Lagos. Sample figure for design review.' },
+  { title: 'Ocean freight, full container', time: '4 to 6 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Quoted per container'], estimate: 'Quoted', estimateNote: 'Per container. The estimator returns a figure for consolidation only.' },
+  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Tracking included', 'Insurance at 2 percent of declared value', 'Collected from the origin address'], estimate: 'Sample US$1,150', estimateNote: 'Saloon car to Lagos. Sample figure for design review.' },
+  { title: 'Warehousing and consolidation', time: 'Held to release', ticks: ['Tracking included', 'Insurance not applicable', 'Charged per consignment'], estimate: 'Quoted', estimateNote: 'Per consignment held.' },
+];
+
+const faqs = [
+  { q: 'How long does shipping from the United States to Nigeria take?', a: 'By air, 7 to 10 business days door to door. By sea, 4 to 6 weeks. Both windows are indicative and are confirmed with your quote, because clearance and inland delivery vary by destination.' },
+  { q: 'How much will my consignment cost?', a: 'Four fields return a figure labelled as an estimate, with the inputs it used named underneath it. Nothing is charged until you confirm the consignment.' },
+  { q: 'Can I send several orders as one shipment?', a: 'Yes. Send each order to the warehouse, tell us when the last one lands, and we combine them into one consignment and quote once.' },
+  { q: 'Can I ship a car?', a: 'Yes, on the auto shipping service. Vehicles travel by sea and are collected from the origin address. Insurance is 2 percent of declared value.' },
+  { q: 'Do I need an account?', a: 'No. Tracking and the estimate both work without one. An account is useful for repeat shipments and for seeing everything in one place, and it stays optional.' },
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grandbelle International Inc | Door to door from the United States to Nigeria and West Africa</title>
+  <meta name="description" content="Air freight, ocean freight, customs clearance, auto shipping, warehousing, and door-to-door delivery from the United States to Nigeria and West Africa. Track a shipment, see the transit window, and price a consignment without an account.">
+  <link rel="preload" href="/fonts/roboto-slab-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/roboto-400-500-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <script is:inline src="https://embed.tawk.to/6aa967c3d1963a3449b3b83e/default" async></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <Header currentPage="/" />
+  <main id="main">
+    <AnswerBand
+      eyebrow="United States to Nigeria and West Africa"
+      heading="Your consignment, from your door to theirs."
+      lead="Air freight, ocean freight, customs clearance, auto shipping, warehousing, and door-to-door delivery, run as one chain with one reference number."
+      facts={[
+        { label: 'How much', figure: 'Four fields', description: 'Destination, quantity, weight, and value return an estimate before you contact anyone.' },
+        { label: 'How long', figure: '7 to 10 days', description: 'Business days by air, door to door. 4 to 6 weeks by sea. Indicative and confirmed with your quote.' },
+        { label: 'Where is it now', figure: 'One field', description: 'Your tracking number returns the status without an account and without a call.', highlight: true },
+      ]}
+      showQuotePrompt={true}
+    />
+    <QuotePromptBand />
+    <section class="band" id="services">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">Six services, one corridor</h2>
+          <p class="muted measure">Each of these is run by the same two offices, so a consignment does not change hands between them.</p>
+        </div>
+        <div class="grid grid--cards">
+          {services.map(s => (
+            <ServiceCard title={s.title} body={s.summary} badge={s.transit} badgeVariant={s.transitVariant} imageSrc={s.image} imageAlt={s.imageAlt} />
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="band band--surface">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">How it works</h2>
+          <p class="muted">The client's own four steps, in the order a first sender meets them.</p>
+        </div>
+        <div class="grid grid--steps">
+          <div class="card">
+            <p class="eyebrow num">01</p>
+            <h3 class="h4">Choose your service</h3>
+            <p class="card__body">Air when it is needed quickly, sea when the volume matters more than the date.</p>
+          </div>
+          <div class="card">
+            <p class="eyebrow num">02</p>
+            <h3 class="h4">Send the details</h3>
+            <p class="card__body">Weight, dimensions, declared value, pickup address, destination. A shopping request works the same way.</p>
+          </div>
+          <div class="card">
+            <p class="eyebrow num">03</p>
+            <h3 class="h4">We receive and ship</h3>
+            <p class="card__body">Consolidated in New York, cleared for export, booked on the next available departure.</p>
+          </div>
+          <div class="card">
+            <p class="eyebrow num">04</p>
+            <h3 class="h4">Track to the destination</h3>
+            <p class="card__body">One number from receipt to the delivery address, readable without an account.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="band" id="rates">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">Service levels, fastest first</h2>
+          <p class="muted measure">Every card carries what does not change: the window, whether tracking is included, and how insurance is calculated. The estimate is a sample figure in United States dollars for design review.</p>
+        </div>
+        <LaneCards cards={laneCards} />
+        <div class="alert alert--attention">
+          <p class="label">Sample figures for design review</p>
+          <p>Every figure on this page is a stand-in so the layout can be judged, and every figure is in United States dollars. The live figures come from the client rate card.</p>
+        </div>
+      </div>
+    </section>
+    <ReviewsBand />
+    <section class="band">
+      <div class="wrap band__inner">
+        <h2 class="h2">Questions before a first shipment</h2>
+        <div class="accordion">
+          {faqs.map(faq => (
+            <details class="accordion__item">
+              <summary>{faq.q}</summary>
+              <p class="accordion__panel">{faq.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</body>
+</html>
