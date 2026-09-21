@@ -1,0 +1,6 @@
+name = "grandbelle-website"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "dist"
+
+[vars]
+PUBLIC_SITE_URL = "https://grandbelleinternational.com"
