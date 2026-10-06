@@ -697,7 +697,14 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
   padding-block: var(--brand-space-8);
 }
 
-/* Dark footer */
+/* Site footer common */
+.site-footer {
+  background: var(--brand-surface);
+  border-top: var(--brand-border-thin) solid var(--brand-border);
+  padding-block: var(--brand-space-16);
+}
+
+/* Dark footer — must come AFTER .site-footer to win cascade */
 .site-footer--dark {
   background: var(--brand-dark-surface);
   color: var(--brand-neutral-0);
@@ -710,13 +717,6 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
 .site-footer--dark .footer__bottom { border-top-color: var(--brand-blue-900); }
 .site-footer--dark .eyebrow { color: var(--brand-blue-300); }
 .site-footer--dark .footer__mark { display: none; }
-
-/* Site footer common */
-.site-footer {
-  background: var(--brand-surface);
-  border-top: var(--brand-border-thin) solid var(--brand-border);
-  padding-block: var(--brand-space-16);
-}
 .footer__grid { display: grid; gap: var(--brand-grid-gap); }
 @media (min-width: 768px) {
   .footer__grid { grid-template-columns: repeat(3, 1fr); gap: var(--brand-grid-gap-wide); }
