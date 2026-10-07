@@ -119,11 +119,7 @@ export default function QuoteEstimator() {
             <p className="field__help" id="q-weight-help">Volumetric weight applies where the consignment is bulky rather than heavy.</p>
             {errors.weight && <p className="field__error" id="q-weight-error" hidden>{errors.weight}</p>}
           </div>
-        ) : (
-          <div className="field">
-            <p className="body-sm muted">Barrel shipment is a flat rate. Weight is not required.</p>
-          </div>
-        )}
+        ) : null}
         <div className="field">
           <label className="field__label" htmlFor="q-email">Email for the written quote</label>
           <input
@@ -153,7 +149,7 @@ export default function QuoteEstimator() {
             onChange={e => setPickup(e.target.value)}
             aria-describedby="q-pickup-help"
           />
-          <p className="field__help" id="q-pickup-help">Collection is available from the origin address. The estimator does not price the domestic leg.</p>
+          <p className="field__help" id="q-pickup-help">Pickup from your address is available — the collection cost is quoted separately by the office. You can also drop off your barrel at our New York warehouse at no charge.</p>
         </div>
       </div>
       <div className="btn-row">
@@ -166,7 +162,9 @@ export default function QuoteEstimator() {
           <p className="caption">Estimated price will be</p>
           <p className="result__figure num" id="estimate-figure">Sample {money(result.freight)}</p>
           <p className="body-sm muted" id="estimate-basis">
-            {result.service === 'barrel' ? '1 barrel' : `${result.weight} kg`}, {LABEL[result.service]}, to {DEST[result.destination]}.
+            {result.service === 'barrel'
+              ? `1 barrel to ${DEST[result.destination]}. Pickup cost quoted separately by the office.`
+              : `${result.weight} kg, ${LABEL[result.service]}, to ${DEST[result.destination]}.`}
           </p>
           <p className="sample-note" id="estimate-note">
             Sample figure for design review. The live figure comes from the client rate card, and the estimate is confirmed by the office before booking.
