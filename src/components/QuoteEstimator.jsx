@@ -137,7 +137,7 @@ export default function QuoteEstimator() {
           {errors.email && <p className="field__error" id="q-email-error" hidden>{errors.email}</p>}
         </div>
         <div className="field">
-          <label className="field__label" htmlFor="q-pickup">Pickup city in the United States</label>
+          <label className="field__label" htmlFor="q-pickup">Pickup city, United States</label>
           <input
             className="input"
             id="q-pickup"
