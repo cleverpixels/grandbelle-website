@@ -259,7 +259,7 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
 .btn-row { display: flex; flex-wrap: wrap; gap: var(--brand-space-3); }
 
 /* Forms */
-.field { display: grid; gap: var(--brand-space-2); }
+.field { display: grid; gap: var(--brand-space-2); align-items: stretch; }
 
 .field__label {
   font-size: var(--brand-text-label-size);
@@ -271,7 +271,7 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
 
 .input, .select {
   width: 100%;
-  min-height: var(--brand-space-12);
+  height: 100%;
   padding: var(--brand-space-2) var(--brand-space-4);
   background: var(--brand-neutral-0);
   color: var(--brand-fg);
