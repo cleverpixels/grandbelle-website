@@ -8,9 +8,9 @@ import { cardFigure, RATE_CARD_NOTICE } from '../data/rate-card.js';
 import '../styles/global.css';
 
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value'], ...cardFigure('express'), fastest: true },
-  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value'], ...cardFigure('air') },
-  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Charged by volume rather than by weight'], ...cardFigure('ocean') },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included'], ...cardFigure('express'), fastest: true },
+  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Tracking included'], ...cardFigure('air') },
+  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Charged by volume rather than by weight'], ...cardFigure('ocean') },
 ];
 ---
 <!DOCTYPE html>
@@ -92,7 +92,7 @@ const laneCards = [
       <div class="wrap band__inner">
         <div class="stack stack--tight">
           <h2 class="h2">Service levels on this corridor</h2>
-          <p class="muted measure">Fastest first. Every card carries the window, whether tracking is included, and how insurance is calculated.{RATE_CARD_NOTICE ? ' Figures are samples in United States dollars.' : ''}</p>
+          <p class="muted measure">Fastest first. Every card carries the window, whether tracking is included, and what the figure is based on.{RATE_CARD_NOTICE ? ' Figures are samples in United States dollars.' : ''}</p>
         </div>
         <LaneCards cards={laneCards} />
         {RATE_CARD_NOTICE && (

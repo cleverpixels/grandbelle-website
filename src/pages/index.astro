@@ -19,19 +19,19 @@ const services = [
 ];
 
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Clearance and final delivery included'], ...cardFigure('express'), fastest: true },
-  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Consolidation of several orders'], ...cardFigure('air') },
-  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Charged by volume rather than by weight'], ...cardFigure('ocean') },
-  { title: 'Ocean freight, full container', time: '4 to 6 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Quoted per container'], ...cardFigure('oceanFcl') },
-  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Tracking included', 'Insurance at 2 percent of declared value', 'Collected from the origin address'], ...cardFigure('auto') },
-  { title: 'Warehousing and consolidation', time: 'Held to release', ticks: ['Tracking included', 'Insurance not applicable', 'Charged per consignment'], ...cardFigure('warehousing') },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included', 'Clearance and final delivery included'], ...cardFigure('express'), fastest: true },
+  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Tracking included', 'Consolidation of several orders'], ...cardFigure('air') },
+  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Charged by volume rather than by weight'], ...cardFigure('ocean') },
+  { title: 'Ocean freight, full container', time: '4 to 6 weeks', ticks: ['Tracking included', 'Quoted per container'], ...cardFigure('oceanFcl') },
+  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Tracking included', 'Collected from the origin address'], ...cardFigure('auto') },
+  { title: 'Warehousing and consolidation', time: 'Held to release', ticks: ['Tracking included', 'Charged per consignment'], ...cardFigure('warehousing') },
 ];
 
 const faqs = [
   { q: 'How long does shipping from the United States to Nigeria take?', a: 'By air, 7 to 10 business days door to door. By sea, 4 to 6 weeks. Both windows are indicative and are confirmed with your quote, because clearance and inland delivery vary by destination.' },
   { q: 'How much will my consignment cost?', a: 'Four fields return a figure labelled as an estimate, with the inputs it used named underneath it. Nothing is charged until you confirm the consignment.' },
   { q: 'Can I send several orders as one shipment?', a: 'Yes. Send each order to the warehouse, tell us when the last one lands, and we combine them into one consignment and quote once.' },
-  { q: 'Can I ship a car?', a: 'Yes, on the auto shipping service. Vehicles travel by sea and are collected from the origin address. Insurance is 2 percent of declared value.' },
+  { q: 'Can I ship a car?', a: 'Yes, on the auto shipping service. Vehicles travel by sea and are collected from the origin address.' },
   { q: 'Do I need an account?', a: 'No. Tracking and the estimate both work without one. An account is useful for repeat shipments and for seeing everything in one place, and it stays optional.' },
 ];
 ---
@@ -110,7 +110,7 @@ const faqs = [
       <div class="wrap band__inner">
         <div class="stack stack--tight">
           <h2 class="h2">Service levels, fastest first</h2>
-          <p class="muted measure">Every card carries what does not change: the window, whether tracking is included, and how insurance is calculated.{RATE_CARD_NOTICE ? ' The estimate is a sample figure in United States dollars for design review.' : ''}</p>
+          <p class="muted measure">Every card carries what does not change: the window, whether tracking is included, and what the figure is based on.{RATE_CARD_NOTICE ? ' The estimate is a sample figure in United States dollars for design review.' : ''}</p>
         </div>
         <LaneCards cards={laneCards} />
         {RATE_CARD_NOTICE && (

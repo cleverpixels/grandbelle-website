@@ -8,15 +8,14 @@ import ReviewsBand from '../components/bands/ReviewsBand.astro';
 import '../styles/global.css';
 
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value'], ...cardFigure('express'), fastest: true },
-  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Tracking included', 'Insurance at 2 percent of declared value'], ...cardFigure('auto') },
-  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Charged by volume rather than by weight'], ...cardFigure('ocean') },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included'], ...cardFigure('express'), fastest: true },
+  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Tracking included'], ...cardFigure('auto') },
+  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Charged by volume rather than by weight'], ...cardFigure('ocean') },
 ];
 
 const faqs = [
   { q: 'Can a vehicle that does not run be shipped?', a: 'Yes, with notice at booking. A non-running vehicle needs different loading and is quoted individually rather than from the estimator.' },
   { q: 'Is duty included in the estimate?', a: 'No. The estimate covers carriage, handling, and clearance work. Duty assessed at the destination is itemised separately before release, on the declared value.' },
-  { q: 'How is the vehicle insured?', a: 'At 2 percent of the declared value for auto shipping, against 1 percent for general cargo, because the value is higher and the handling is different.' },
   { q: 'Can personal effects travel with the vehicle?', a: 'Some items can, and some cannot, and the rule depends on the destination. Send the list with the vehicle details and we will confirm before the consignment is collected.' },
 ];
 ---
@@ -65,7 +64,7 @@ const faqs = [
                 <li><span class="tick" aria-hidden="true">&#10003;</span><span>The pickup address and a contact at that address</span></li>
                 <li><span class="tick" aria-hidden="true">&#10003;</span><span>The make, model, year, and whether the vehicle runs</span></li>
                 <li><span class="tick" aria-hidden="true">&#10003;</span><span>The title or the export documentation for the vehicle</span></li>
-                <li><span class="tick" aria-hidden="true">&#10003;</span><span>The declared value, which insurance is calculated from</span></li>
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>The declared value, which duty is assessed on at the destination</span></li>
                 <li><span class="tick" aria-hidden="true">&#10003;</span><span>The delivery address and a contact at the far end</span></li>
               </ul>
             </div>
@@ -84,7 +83,6 @@ const faqs = [
               <ul class="tick-list">
                 <li><span class="tick" aria-hidden="true">&#10003;</span><span>3 to 5 weeks door to door, indicative</span></li>
                 <li><span class="tick" aria-hidden="true">&#10003;</span><span>Collected from the origin address</span></li>
-                <li><span class="tick" aria-hidden="true">&#10003;</span><span>Insurance at 2 percent of declared value</span></li>
                 <li><span class="tick" aria-hidden="true">&#10003;</span><span>Clearance handled in Lagos</span></li>
                 <li><span class="tick" aria-hidden="true">&#10003;</span><span>Tracking included, no account required</span></li>
               </ul>
@@ -119,7 +117,7 @@ const faqs = [
       <div class="wrap band__inner">
         <div class="stack stack--tight">
           <h2 class="h2">Service levels on this corridor</h2>
-          <p class="muted measure">Fastest first. Every card carries what does not change: the window, whether tracking is included, and how insurance is calculated.{RATE_CARD_NOTICE ? ' Figures are samples in United States dollars.' : ''}</p>
+          <p class="muted measure">Fastest first. Every card carries what does not change: the window, whether tracking is included, and what the figure is based on.{RATE_CARD_NOTICE ? ' Figures are samples in United States dollars.' : ''}</p>
         </div>
         <LaneCards cards={laneCards} />
         {RATE_CARD_NOTICE && (

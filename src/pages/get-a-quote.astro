@@ -8,10 +8,10 @@ import QuoteEstimator from '../components/QuoteEstimator.jsx';
 import '../styles/global.css';
 
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Insurance at 1 percent of declared value', 'Tracking included'], ...cardFigure('express'), fastest: true },
-  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Insurance at 1 percent of declared value', 'Consolidation available', 'Tracking included'], ...cardFigure('air') },
-  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Insurance at 2 percent of declared value', 'Collected from origin address', 'Tracking included'], ...cardFigure('auto') },
-  { title: 'Barrel shipment', time: '4 to 6 weeks', ticks: ['Flat rate per barrel', 'No insurance at this rate', 'Tracking included'], ...cardFigure('barrel') },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included'], ...cardFigure('express'), fastest: true },
+  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Consolidation available', 'Tracking included'], ...cardFigure('air') },
+  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Collected from origin address', 'Tracking included'], ...cardFigure('auto') },
+  { title: 'Barrel shipment', time: '4 to 6 weeks', ticks: ['Flat rate per barrel', 'Tracking included'], ...cardFigure('barrel') },
 ];
 ---
 <!DOCTYPE html>
@@ -81,7 +81,7 @@ const laneCards = [
           <div class="card">
             <p class="eyebrow num">01</p>
             <h3 class="h4">The estimate appears</h3>
-            <p class="card__body">Beside the form, with the weight, destination, service, and insurance basis it was calculated from named under the figure.</p>
+            <p class="card__body">Beside the form, with the weight, destination, and service it was calculated from named under the figure.</p>
           </div>
           <div class="card">
             <p class="eyebrow num">02</p>
