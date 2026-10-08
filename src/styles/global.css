@@ -259,7 +259,7 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
 .btn-row { display: flex; flex-wrap: wrap; gap: var(--brand-space-3); }
 
 /* Forms */
-.field { display: grid; gap: var(--brand-space-2); align-items: stretch; }
+.field { display: grid; gap: var(--brand-space-2); align-items: stretch; align-content: start; }
 
 .field__label {
   font-size: var(--brand-text-label-size);
