@@ -267,6 +267,7 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
   line-height: var(--brand-text-label-leading);
   letter-spacing: var(--brand-text-label-tracking);
   color: var(--brand-fg);
+  white-space: nowrap;
 }
 
 .input, .select {

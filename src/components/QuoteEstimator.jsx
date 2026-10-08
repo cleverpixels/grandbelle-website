@@ -121,7 +121,7 @@ export default function QuoteEstimator() {
           </div>
         ) : null}
         <div className="field">
-          <label className="field__label" htmlFor="q-email">Email for the written quote</label>
+          <label className="field__label" htmlFor="q-email">Your email</label>
           <input
             className={`input${errors.email ? ' aria-invalid="true"' : ''}`}
             id="q-email"
