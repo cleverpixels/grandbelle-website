@@ -3,13 +3,14 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import AnswerBand from '../components/bands/AnswerBand.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
+import { cardFigure, RATE_CARD_NOTICE } from '../data/rate-card.js';
 import ReviewsBand from '../components/bands/ReviewsBand.astro';
 import '../styles/global.css';
 
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value'], estimate: 'Sample US$430', estimateNote: '40 kg to Lagos. Sample figure for design review.', fastest: true },
-  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Tracking included', 'Insurance at 2 percent of declared value'], estimate: 'Sample US$1,150', estimateNote: 'Saloon car to Lagos. Sample figure for design review.' },
-  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Charged by volume rather than by weight'], estimate: 'Sample US$340', estimateNote: 'One cubic metre to Lagos. Sample figure for design review.' },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value'], ...cardFigure('express'), fastest: true },
+  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Tracking included', 'Insurance at 2 percent of declared value'], ...cardFigure('auto') },
+  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Charged by volume rather than by weight'], ...cardFigure('ocean') },
 ];
 
 const faqs = [
@@ -118,13 +119,15 @@ const faqs = [
       <div class="wrap band__inner">
         <div class="stack stack--tight">
           <h2 class="h2">Service levels on this corridor</h2>
-          <p class="muted measure">Fastest first. Every card carries what does not change: the window, whether tracking is included, and how insurance is calculated. Figures are samples in United States dollars.</p>
+          <p class="muted measure">Fastest first. Every card carries what does not change: the window, whether tracking is included, and how insurance is calculated.{RATE_CARD_NOTICE ? ' Figures are samples in United States dollars.' : ''}</p>
         </div>
         <LaneCards cards={laneCards} />
-        <div class="alert alert--attention">
-          <p class="label">Sample figures for design review</p>
-          <p>Every figure on this page is a stand-in so the layout can be judged, and every figure is in United States dollars. The live figures come from the client rate card.</p>
-        </div>
+        {RATE_CARD_NOTICE && (
+          <div class="alert alert--attention">
+            <p class="label">{RATE_CARD_NOTICE.label}</p>
+            <p>{RATE_CARD_NOTICE.body}</p>
+          </div>
+        )}
       </div>
     </section>
     <section class="band">

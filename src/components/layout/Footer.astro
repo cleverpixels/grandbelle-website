@@ -1,4 +1,5 @@
 ---
+import { RATE_CARD_FOOTER } from '../../data/rate-card.js';
 ---
 
 <div class="footer-markstrip">
@@ -33,7 +34,7 @@
       </div>
     </div>
     <div class="footer__bottom">
-      <p class="caption">Grandbelle International Inc. Sample figures and transit windows shown for design review.</p>
+      <p class="caption">Grandbelle International Inc.{RATE_CARD_FOOTER ? ' ' + RATE_CARD_FOOTER : ''}</p>
     </div>
   </div>
 </footer>

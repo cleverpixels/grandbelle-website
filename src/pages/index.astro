@@ -6,6 +6,7 @@ import QuotePromptBand from '../components/bands/QuotePromptBand.astro';
 import ReviewsBand from '../components/bands/ReviewsBand.astro';
 import ServiceCard from '../components/bands/ServiceCard.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
+import { cardFigure, RATE_CARD_NOTICE } from '../data/rate-card.js';
 import '../styles/global.css';
 
 const services = [
@@ -18,12 +19,12 @@ const services = [
 ];
 
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Clearance and final delivery included'], estimate: 'Sample US$430', estimateNote: '40 kg to Lagos. Sample figure for design review.', fastest: true },
-  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Consolidation of several orders'], estimate: 'Sample US$285', estimateNote: '40 kg to Lagos. Sample figure for design review.' },
-  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Charged by volume rather than by weight'], estimate: 'Sample US$340', estimateNote: 'One cubic metre to Lagos. Sample figure for design review.' },
-  { title: 'Ocean freight, full container', time: '4 to 6 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Quoted per container'], estimate: 'Quoted', estimateNote: 'Per container. The estimator returns a figure for consolidation only.' },
-  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Tracking included', 'Insurance at 2 percent of declared value', 'Collected from the origin address'], estimate: 'Sample US$1,150', estimateNote: 'Saloon car to Lagos. Sample figure for design review.' },
-  { title: 'Warehousing and consolidation', time: 'Held to release', ticks: ['Tracking included', 'Insurance not applicable', 'Charged per consignment'], estimate: 'Quoted', estimateNote: 'Per consignment held.' },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Clearance and final delivery included'], ...cardFigure('express'), fastest: true },
+  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Consolidation of several orders'], ...cardFigure('air') },
+  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Charged by volume rather than by weight'], ...cardFigure('ocean') },
+  { title: 'Ocean freight, full container', time: '4 to 6 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Quoted per container'], ...cardFigure('oceanFcl') },
+  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Tracking included', 'Insurance at 2 percent of declared value', 'Collected from the origin address'], ...cardFigure('auto') },
+  { title: 'Warehousing and consolidation', time: 'Held to release', ticks: ['Tracking included', 'Insurance not applicable', 'Charged per consignment'], ...cardFigure('warehousing') },
 ];
 
 const faqs = [
@@ -109,13 +110,15 @@ const faqs = [
       <div class="wrap band__inner">
         <div class="stack stack--tight">
           <h2 class="h2">Service levels, fastest first</h2>
-          <p class="muted measure">Every card carries what does not change: the window, whether tracking is included, and how insurance is calculated. The estimate is a sample figure in United States dollars for design review.</p>
+          <p class="muted measure">Every card carries what does not change: the window, whether tracking is included, and how insurance is calculated.{RATE_CARD_NOTICE ? ' The estimate is a sample figure in United States dollars for design review.' : ''}</p>
         </div>
         <LaneCards cards={laneCards} />
-        <div class="alert alert--attention">
-          <p class="label">Sample figures for design review</p>
-          <p>Every figure on this page is a stand-in so the layout can be judged, and every figure is in United States dollars. The live figures come from the client rate card.</p>
-        </div>
+        {RATE_CARD_NOTICE && (
+          <div class="alert alert--attention">
+            <p class="label">{RATE_CARD_NOTICE.label}</p>
+            <p>{RATE_CARD_NOTICE.body}</p>
+          </div>
+        )}
       </div>
     </section>
     <ReviewsBand />
