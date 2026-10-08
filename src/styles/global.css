@@ -322,7 +322,7 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
 }
 
 .form-row { display: grid; gap: var(--brand-space-3); }
-.form-grid { display: grid; gap: var(--brand-space-4); }
+.form-grid { display: grid; gap: var(--brand-space-4); align-items: stretch; }
 
 .result {
   display: grid;
