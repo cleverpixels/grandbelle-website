@@ -9,6 +9,7 @@ import {
   cardFigure,
   ESTIMATE_NOTE,
   RATE_CARD_LIVE,
+  PRICED_DESTINATIONS,
 } from '../data/rate-card.js';
 
 /**
@@ -31,9 +32,14 @@ import {
  *      attribute the stylesheet keys on (`.input[aria-invalid="true"]`) was
  *      never set. It is a real attribute now.
  *
- * NOT changed here, because it is a commercial decision and not a bug:
- * the old source carried the comment "Displayed to customer = actual × 1.05",
- * but no uplift was ever applied. See the rate-card module notes.
+ * RESOLVED 2026-10-08 with the rate card in hand: the comment in the old
+ * source ("Displayed to customer = actual × 1.05") was the one part of the
+ * old maths that was right, and it had simply never been implemented. The
+ * rate card confirms the 5% markup on displayed estimates, and it is applied
+ * inside priceConsignment() so no service can forget it. The rate card also
+ * settles three things the estimator previously guessed at: the minimum
+ * charge, the volumetric divisor, and the fact that the invoiced amount is
+ * the un-marked-up figure.
  */
 
 const OFFICE_NOTE =
@@ -47,16 +53,45 @@ function figureText(amount) {
   return (RATE_CARD_LIVE ? '' : 'Sample ') + money(amount);
 }
 
+/**
+ * Why the office quotes a service rather than the page. Deliberately worded
+ * for a customer: it says what happens next, not which internal figure was
+ * missing.
+ */
+const OFFICE_REASON = {
+  'unconfirmed-rate': 'quoted by the office for your consignment.',
+  'by-design': 'quoted by the office for every consignment.',
+  'unquoted-destination':
+    'quoted by the office. We price Lagos online; the office quotes other destinations directly.',
+  'no-weight': 'quoted by the office.',
+  'unknown-service': 'quoted by the office.',
+};
+
+/** The weight below which the rate card's minimum charge takes over. */
+function floorThresholdKg(service) {
+  const terms = RATES[service];
+  if (!terms || typeof terms.perKg !== 'number' || !terms.minimum) return null;
+  const kg = terms.minimum / terms.perKg;
+  return kg > 0 ? Math.round(kg) : null;
+}
+
 function basisSentence(result) {
   if (result.kind === 'office') {
-    return `${serviceOf(result.service).label}: quoted by the office for this consignment.`;
+    const label = serviceOf(result.service).label;
+    return `${label}: ${OFFICE_REASON[result.reason] ?? 'quoted by the office.'}`;
   }
-  if (result.service === 'barrel') {
-    return `1 barrel to ${DEST_LABEL.barrel}. Pickup cost quoted separately by the office.`;
-  }
-  return `${result.weight} kg, ${serviceOf(result.service).short}, to ${
-    DEST_LABEL[result.destination]
-  }.`;
+
+  const short = serviceOf(result.service).short;
+  const dest = DEST_LABEL[result.destination];
+  const threshold = floorThresholdKg(result.service);
+
+  const base = result.floorApplied
+    ? `${short} to ${dest}, at our minimum charge — which applies to consignments under about ${threshold} kg.`
+    : `${result.weight} kg, ${short}, to ${dest}.`;
+
+  return result.indicative
+    ? `${base} The rate is indicative and confirmed by the office before booking.`
+    : base;
 }
 
 export default function QuoteEstimator() {
@@ -69,9 +104,10 @@ export default function QuoteEstimator() {
   const [errors, setErrors] = useState({});
   const weightRef = useRef(null);
 
-  // A weight is only meaningful for a service we price by weight.
+  // A weight is only meaningful for a service, and a destination, we price.
   const officeOnly = Boolean(RATES[service]?.officeOnly);
-  const weightRequired = service !== 'barrel' && !officeOnly;
+  const destinationPriced = PRICED_DESTINATIONS.includes(destination);
+  const weightRequired = !officeOnly && destinationPriced;
 
   function clearError(name) {
     setErrors((prev) => {
@@ -109,8 +145,17 @@ export default function QuoteEstimator() {
 
     setResult(
       priced.kind === 'figure'
-        ? { kind: 'figure', amount: priced.amount, service, destination, weight: w }
-        : { kind: 'office', service, destination, weight: w }
+        ? {
+            kind: 'figure',
+            amount: priced.amount,
+            billableKg: priced.billableKg,
+            floorApplied: priced.floorApplied,
+            indicative: priced.indicative,
+            service,
+            destination,
+            weight: w,
+          }
+        : { kind: 'office', reason: priced.reason, service, destination, weight: w }
     );
   }
 

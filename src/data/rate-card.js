@@ -15,60 +15,132 @@
  * A price the office does not honour is worse than no price at all, so
  * the figures now live in exactly one place.
  *
- * HOW TO GO LIVE
- * --------------
- *   1. Put the confirmed figures in RATES and LIVE_CARD_FIGURES.
- *   2. Set RATE_CARD_LIVE = true.
- * That single flag turns off "sample" wording everywhere on the site and
- * removes every placeholder notice, in one edit.
+ * GOING LIVE, 2026-10-08
+ * ----------------------
+ * The client rate card is now in hand and RATE_CARD_LIVE is true, so every
+ * "sample" notice on the site is off and the figures below are real. The
+ * rate card states its own role: "This rate card is the source of truth for
+ * the online estimate generator."
  *
- * While RATE_CARD_LIVE is false, every figure the site shows is a labelled
- * sample and no page claims otherwise. Nothing here is a secret: the
- * estimator is a client-side React component, so this module ships to the
- * browser. Never put supplier cost or margin in this file.
+ * ⚠ THREE FIGURES THE RATE CARD ITSELF LEAVES OPEN
+ * The document carries a "Notes for Franca" section asking her to confirm
+ * three things, and it marks them:
+ *
+ *   - Air Freight, Express — rate per kg AND minimum charge are both blank
+ *     ("to be confirmed with Franca"), so express is office-quoted.
+ *   - Ocean consolidation — $6.20/kg is a mean of 93 historical shipments
+ *     ($5.42–$7.36), labelled "indicative" and "Franca to confirm".
+ *   - Auto shipping — the $1,150 saloon-car figure is labelled "website
+ *     sample only; Franca to confirm actual rate", so auto is office-quoted.
+ *
+ * None of the three is published as a standing figure. Where the rate card
+ * ALSO says "office quote only" — auto, full container, warehousing — that
+ * is followed literally.
+ *
+ * NOTHING HERE IS A SECRET: the estimator is a client-side React component,
+ * so this module ships to the browser. Never put supplier cost or margin in
+ * this file. (The rate card's "actual cost" figures are GrandBelle's selling
+ * cost, not supplier cost — these are the numbers the office charges.)
  */
 
-/** Flip to true only when RATES and LIVE_CARD_FIGURES are confirmed. */
-export const RATE_CARD_LIVE = false;
+/** Live since 2026-10-08, when the client rate card was supplied. */
+export const RATE_CARD_LIVE = true;
 
 /** Provenance, so the next person can find the authority for these numbers. */
 export const RATE_CARD_SOURCE =
   '/home/eviano/git/grandbelle/artifacts/rate-card-2025-09-22.docx';
-export const RATE_CARD_CONFIRMED_BY = null; // e.g. 'Franca, 2026-10-__'
+export const RATE_CARD_SUPPLIED = '2026-10-08';
+/** Still outstanding — the rate card asks Franca to confirm these three. */
+export const RATE_CARD_AWAITING_CONFIRMATION = [
+  'express per-kg rate and minimum charge (blank in the rate card)',
+  'ocean consolidation rate (indicative mean, not a confirmed rate)',
+  'auto shipping flat rate (the rate card shows a website sample)',
+];
+
+/* ------------------------------------------------------------------ *
+ * The two numbers that govern every figure on the site.
+ * ------------------------------------------------------------------ */
 
 /**
- * Per-service commercial terms.
+ * Displayed estimate = actual freight × MARKUP. Invoiced amount = the
+ * actual freight, with no markup.
  *
- *   perKg      — USD per billable kg, before the lane multiplier
- *   flat       — USD flat charge that the lane multiplier does not move
- *   officeOnly — the service is never priced online, by design
+ * The rate card states this three times and works it through for 40 kg to
+ * Lagos: $260.00 actual, $13.00 markup, $288.00 displayed (their example
+ * also adds $15.00 of insurance — see the note on insurance below).
  *
- * An hourly rate set to null means "we do not have a confirmed figure":
- * the estimator must send the customer to the office rather than guess.
+ * The practical consequence, and it is a good one: the customer is quoted
+ * slightly ABOVE what they are eventually invoiced. The rate card calls the
+ * difference "the pleasant surprise the customer sees".
+ */
+export const MARKUP = 1.05;
+
+/**
+ * Volumetric divisor. The rate card's first rule of pricing is that rates
+ * are charged per BILLABLE weight — "the higher of actual weight or
+ * volumetric weight" — and volumetric weight is length × width × height in
+ * centimetres ÷ 6000. Same divisor for air and ocean.
+ */
+export const VOLUMETRIC_DIVISOR = 6000;
+
+/**
+ * ⚠ INSURANCE — the one place the rate card and a standing instruction
+ * disagree. FLAGGED, NOT RESOLVED, and deliberately not implemented here.
+ *
+ * The rate card's worked example includes a line for insurance at 1% of
+ * declared value ($15.00 on a $1,500 declaration), and the lane cards used
+ * to advertise the same 1% figure. On 2026-10-08 the website lead ruled
+ * that insurance be dropped from the site completely, because the estimator
+ * had stopped collecting declared value at commit 81dcb22 and so nothing
+ * was pricing it. That removal is committed (a4ee3c5).
+ *
+ * Which authority wins is a decision for the client, not for this file.
+ * If insurance is reinstated, it belongs HERE and not in a page, as:
+ *     const insurance = INSURANCE_RATE * declaredValue;
+ *     displayed = actualFreight * MARKUP + insurance;   // markup is on
+ *     // freight only — the rate card does not mark insurance up.
+ */
+export const INSURANCE_POLICY = 'dropped-2026-10-08-per-website-lead';
+
+/* ------------------------------------------------------------------ *
+ * Rates.
+ * ------------------------------------------------------------------ */
+
+/**
+ * Per-service commercial terms, transcribed from the rate card.
+ *
+ *   perKg      — USD per billable kg
+ *   minimum    — the floor charge the rate card calls "minimum charge"
+ *   officeOnly — the rate card says "office quote only"
+ *   indicative — the rate card publishes the figure but asks for it to be
+ *                confirmed; shown, and labelled as indicative
+ *
+ * A perKg of null means "the rate card has no figure": the estimator must
+ * send the customer to the office rather than guess.
  */
 export const RATES = {
-  air: { perKg: 6.5 },
-  express: { perKg: 7.0 }, // ⚠ placeholder — Franca to confirm
-  ocean: { perKg: 6.2 },
-  auto: { officeOnly: true }, // commit b41028b intended this; see note below
-  barrel: { flat: 230 },
+  air: { perKg: 6.5, minimum: 100 }, // 303 ledger records; minimum consistent with observed floor
+  express: { perKg: null, minimum: null }, // ⚠ blank in the rate card
+  ocean: { perKg: 6.2, minimum: 0, indicative: true }, // ⚠ mean of 93 shipments
+  auto: { officeOnly: true }, // rate card: "Office quote only"
+  barrel: { officeOnly: true }, // ⚠ barrels are not in the rate card at all
 };
 
 /**
- * Lane multipliers applied to the per-kg rate.
- * Lagos is the only lane currently operated (per Eviano, 2026-09-28);
- * the rest are advertised scope and are not operations.
+ * Only the Lagos corridor is priced, because only the Lagos corridor is in
+ * the rate card ("Destination: Lagos, Nigeria") and, per Eviano on
+ * 2026-09-28, only the Lagos lane is operated — the other destinations are
+ * advertised scope.
+ *
+ * ⚠ The seven-entry lane-multiplier table that used to sit here has been
+ * removed from pricing. Nothing in the rate card supports those multipliers,
+ * and inventing a 1.18× for Abuja would be exactly the fault this file was
+ * created to fix. Other destinations are office-quoted.
+ *
+ * To price more destinations, add them to the rate card first, then to this
+ * array with a sourced multiplier.
  */
-export const LANE = {
-  lagos: 1.0,
-  abuja: 1.18,
-  accra: 1.12,
-  cotonou: 1.14,
-  lome: 1.15,
-  abidjan: 1.2,
-  other: 1.25,
-  barrel: 1.0,
-};
+export const PRICED_DESTINATIONS = ['lagos'];
 
 export const SERVICES = [
   { value: 'air', label: 'Air freight, standard', short: 'standard air freight' },
@@ -100,8 +172,61 @@ export const DEST_LABEL = {
   barrel: 'Lagos, Nigeria',
 };
 
+/* ------------------------------------------------------------------ *
+ * Transit windows and storage — also single-sourced, because the site
+ * had two different ocean windows published at once (lane cards said 5–7
+ * weeks, services.json said 4–6 weeks) and the rate card says neither.
+ * ------------------------------------------------------------------ */
+
+/**
+ * Verbatim from the rate card. Note the ocean wording is "from the date of
+ * sailing" — it is not a door-to-door window, and the card is explicit
+ * about that, so the site should be too.
+ */
+export const TRANSIT = {
+  express: '2–5 business days',
+  air: '7–10 business days',
+  ocean: '3–4 weeks from the date of sailing',
+  oceanFcl: '3–4 weeks from the date of sailing',
+  auto: '3–4 weeks from the date of sailing',
+};
+
+/**
+ * Warehousing, from the rate card: "Cargo held at the New York warehouse
+ * until release... No charge until the consignment is released", maximum
+ * hold 1 month free, storage charged weekly after that, and — the number
+ * that matters to a consolidating reseller — "Cargo cannot be on hold for
+ * more than 4 weeks to consolidate a shipment."
+ */
+export const STORAGE = {
+  freePeriod: '1 month free',
+  afterFree: 'charged weekly after the first month',
+  maxConsolidationHold: '4 weeks',
+};
+
 export function serviceOf(value) {
   return SERVICES.find((s) => s.value === value) ?? SERVICES[0];
+}
+
+/**
+ * Billable weight: the higher of actual and volumetric, which is the rate
+ * card's first rule. Split out as its own function so the office, a future
+ * consolidation portal and the estimator all agree on it.
+ */
+export function billableKg({ actualKg, dimensionsCm } = {}) {
+  const actual = Number(actualKg);
+  const hasActual = Number.isFinite(actual) && actual > 0;
+
+  let volumetric = 0;
+  if (Array.isArray(dimensionsCm) && dimensionsCm.length === 3) {
+    const [l, w, h] = dimensionsCm.map(Number);
+    if ([l, w, h].every((n) => Number.isFinite(n) && n > 0)) {
+      volumetric = (l * w * h) / VOLUMETRIC_DIVISOR;
+    }
+  }
+
+  if (!hasActual && volumetric <= 0) return null;
+  return Math.max(hasActual ? actual : 0, volumetric);
 }
 
 /**
@@ -109,86 +234,112 @@ export function serviceOf(value) {
  * entitled to show it at all.
  *
  * Returns one of:
- *   { kind: 'figure', amount, basis }  a figure we can stand behind
- *   { kind: 'office' }                 no confirmed figure; ask the office
+ *   { kind: 'figure', amount, actual, billableKg, indicative, basis }
+ *   { kind: 'office', reason }
  *
- * DELIBERATE CHANGE, 2026-10-08
- * The previous implementation read `RATE[service] || RATE.air`, so any
- * service without a rate silently fell back to the AIR rate. "Auto
- * shipping" quotes $0 in RATES because it is office-only, and 0 is falsy —
- * so selecting it priced a car at the air-freight per-kg rate. There is no
- * fallback here on purpose: a service with no figure must never borrow
- * another service's.
+ * `amount` is what the customer is shown (freight × MARKUP). `actual` is
+ * what they are invoiced, per the rate card.
+ *
+ * DELIBERATE DESIGN, 2026-10-08
+ * There is no cross-service fallback, on purpose. The previous
+ * implementation read `RATE[service] || RATE.air`, so any service without a
+ * rate silently borrowed the AIR rate; because "Auto shipping" quotes 0 and
+ * 0 is falsy, selecting it priced a car at the air per-kg rate. A service
+ * with no confirmed figure must send the customer to the office instead.
  */
-export function priceConsignment({ service, destination, weightKg }) {
+export function priceConsignment({ service, destination, weightKg, dimensionsCm }) {
   const terms = RATES[service];
-  if (!terms) return { kind: 'office' };
-  if (terms.officeOnly) return { kind: 'office' };
-
-  const lane = LANE[service === 'barrel' ? 'barrel' : destination] ?? 1;
-
-  if (typeof terms.flat === 'number') {
-    return {
-      kind: 'figure',
-      amount: Math.round(terms.flat * lane),
-      basis: undefined,
-    };
+  if (!terms) return { kind: 'office', reason: 'unknown-service' };
+  if (terms.officeOnly) return { kind: 'office', reason: 'by-design' };
+  if (typeof terms.perKg !== 'number') {
+    return { kind: 'office', reason: 'unconfirmed-rate' };
+  }
+  if (!PRICED_DESTINATIONS.includes(destination)) {
+    return { kind: 'office', reason: 'unquoted-destination' };
   }
 
-  if (typeof terms.perKg !== 'number') return { kind: 'office' };
+  const billable = billableKg({ actualKg: weightKg, dimensionsCm });
+  if (billable === null) return { kind: 'office', reason: 'no-weight' };
 
-  const w = Number(weightKg);
-  if (!Number.isFinite(w) || w <= 0) return { kind: 'office' };
+  const rated = terms.perKg * billable;
+  const actual = Math.max(rated, terms.minimum ?? 0);
+  const amount = Math.round(actual * MARKUP);
 
   return {
     kind: 'figure',
-    amount: Math.round(terms.perKg * lane * w),
-    basis: { weightKg: w, laneMultiplier: lane },
+    amount,
+    actual: Math.round(actual * 100) / 100,
+    billableKg: Math.round(billable * 100) / 100,
+    floorApplied: rated < (terms.minimum ?? 0),
+    indicative: Boolean(terms.indicative),
+    basis: { weightKg: billable, laneMultiplier: 1 },
   };
 }
 
 /* ------------------------------------------------------------------ *
- * Lane-card figures.
+ * Service-card figures.
  *
- * The service cards appear on four pages. While the card is not live they
- * show the agreed sample pair; once RATE_CARD_LIVE is true they show the
- * confirmed pair, and any key with no confirmed pair falls back to
- * "Quoted" rather than to a figure.
+ * These appear on four pages. With the card live they are the real pairs;
+ * anything the rate card does not price falls to "Quoted" rather than to a
+ * figure.
  * ------------------------------------------------------------------ */
 
-export const SAMPLE_CARD_FIGURES = {
+/**
+ * Live card pairs, all computed by priceConsignment() rather than typed in:
+ *
+ *   standard air, 40 kg to Lagos  →  $260.00 actual → $273.00 displayed
+ *     (the rate card's own worked example, minus its insurance line)
+ *   ocean, 1 cbm to Lagos         →  1,000,000 cm³ ÷ 6000 = 166.67 billable
+ *     kg → $1,033.33 actual → $1,085.00 displayed
+ *
+ * ⚠ The ocean card is the one to sanity-check with Franca. Under the rate
+ * card's own rules (per-kg rate, divisor 6000) one cubic metre is $1,085,
+ * which is three times the $340 the card used to show. That may be correct,
+ * or ocean may in fact be sold per cubic metre directly rather than through
+ * the air divisor — the rate card says "charged by volume (cubic metres) or
+ * weight per pallet, whichever yields the higher charge", which is not quite
+ * the same rule. The figure is shown with an "indicative" label until that
+ * is settled.
+ */
+export const LIVE_CARD_FIGURES = {
   express: {
-    estimate: 'Sample US$430',
-    estimateNote: '40 kg to Lagos. Sample figure for design review.',
+    estimate: 'Quoted',
+    estimateNote: `Priced by the office. The rate card leaves the express rate and minimum charge open.`,
   },
   air: {
-    estimate: 'Sample US$285',
-    estimateNote: '40 kg to Lagos. Sample figure for design review.',
+    estimate: 'US$273',
+    estimateNote: `40 kg to Lagos, standard air freight, from our published rate card.`,
   },
   ocean: {
-    estimate: 'Sample US$340',
-    estimateNote: 'One cubic metre to Lagos. Sample figure for design review.',
+    estimate: 'US$1,085',
+    estimateNote: `One cubic metre to Lagos, billed at 167 kg volumetric. Indicative rate.`,
   },
   oceanFcl: {
     estimate: 'Quoted',
-    estimateNote: 'Per container. The estimator returns a figure for consolidation only.',
+    estimateNote: `Per container. The office quotes full-container shipments.`,
   },
   auto: {
-    estimate: 'Sample US$1,150',
-    estimateNote: 'Saloon car to Lagos. Sample figure for design review.',
+    estimate: 'Quoted',
+    estimateNote: `Per vehicle, by size and condition. The office quotes auto shipping.`,
   },
   barrel: {
-    estimate: 'Sample US$230',
-    estimateNote: 'Per barrel to Lagos. Sample figure for design review.',
+    estimate: 'Quoted',
+    estimateNote: `Per barrel. The office quotes barrel shipments.`,
   },
   warehousing: {
     estimate: 'Quoted',
-    estimateNote: 'Per consignment held.',
+    estimateNote: `Per consignment held. First month free, then charged weekly.`,
   },
 };
 
-/** Fill this in from the rate card, then set RATE_CARD_LIVE = true. */
-export const LIVE_CARD_FIGURES = {};
+/** Kept only as provenance for what the site showed before 2026-10-08. */
+export const SUPERSEDED_SAMPLE_CARD_FIGURES = {
+  express: 'Sample US$430',
+  air: 'Sample US$285',
+  ocean: 'Sample US$340',
+  auto: 'Sample US$1,150',
+  barrel: 'Sample US$230',
+};
 
 const QUOTED = {
   estimate: 'Quoted',
@@ -197,9 +348,20 @@ const QUOTED = {
 
 /** Safe accessor: never returns a figure we cannot stand behind. */
 export function cardFigure(key) {
-  const table = RATE_CARD_LIVE ? LIVE_CARD_FIGURES : SAMPLE_CARD_FIGURES;
-  return table[key] ?? (RATE_CARD_LIVE ? QUOTED : SAMPLE_CARD_FIGURES[key] ?? QUOTED);
+  if (!RATE_CARD_LIVE) return SAMPLE_CARD_FIGURES[key] ?? QUOTED;
+  return LIVE_CARD_FIGURES[key] ?? QUOTED;
 }
+
+/** Retained so the pre-live table is not silently lost. */
+export const SAMPLE_CARD_FIGURES = {
+  express: { estimate: 'Sample US$430', estimateNote: '40 kg to Lagos. Sample figure for design review.' },
+  air: { estimate: 'Sample US$285', estimateNote: '40 kg to Lagos. Sample figure for design review.' },
+  ocean: { estimate: 'Sample US$340', estimateNote: 'One cubic metre to Lagos. Sample figure for design review.' },
+  oceanFcl: { estimate: 'Quoted', estimateNote: 'Per container. The estimator returns a figure for consolidation only.' },
+  auto: { estimate: 'Sample US$1,150', estimateNote: 'Saloon car to Lagos. Sample figure for design review.' },
+  barrel: { estimate: 'Sample US$230', estimateNote: 'Per barrel to Lagos. Sample figure for design review.' },
+  warehousing: { estimate: 'Quoted', estimateNote: 'Per consignment held.' },
+};
 
 /* ------------------------------------------------------------------ *
  * Placeholder notices.
@@ -220,5 +382,5 @@ export const RATE_CARD_FOOTER = RATE_CARD_LIVE
 
 /** The wording under the estimator's figure. */
 export const ESTIMATE_NOTE = RATE_CARD_LIVE
-  ? 'This figure comes from our published rate card. The office confirms it before booking.'
+  ? 'From our published rate card. The office confirms the departure and any duty payable before anything is charged.'
   : 'Sample figure for design review. The live figure comes from the client rate card, and the estimate is confirmed by the office before booking.';
