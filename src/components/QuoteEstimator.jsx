@@ -19,7 +19,10 @@ const SERVICES = [
 ];
 
 // Sample rates — must be replaced with client rate card
-const RATE = { air: 6.5, express: 9.8, ocean: 3.4, auto: 22.0, barrel: 230 };
+// Rates are per billable kg (actual cost). Displayed to customer = actual × 1.05.
+// Rate card source: /home/eviano/git/grandbelle/artifacts/rate-card-2025-09-22.docx
+// Note: Air Freight Express rate is TBD — Franca to confirm. Sample uses $7.00/kg placeholder.
+const RATE = { air: 6.50, express: 7.00, ocean: 6.20, auto: 0, barrel: 230 };
 const LANE = { lagos: 1.0, abuja: 1.18, accra: 1.12, cotonou: 1.14, lome: 1.15, abidjan: 1.2, other: 1.25, barrel: 1.0 };
 const LABEL = { air: 'standard air freight', express: 'express air freight', ocean: 'ocean freight consolidation', auto: 'auto shipping', barrel: 'barrel shipment' };
 const DEST = { lagos: 'Lagos, Nigeria', abuja: 'Abuja, Nigeria', accra: 'Accra, Ghana', cotonou: 'Cotonou, Benin', lome: 'Lome, Togo', abidjan: 'Abidjan, Cote d Ivoire', other: 'a West African destination', barrel: 'Lagos, Nigeria' };
