@@ -4,12 +4,13 @@ import Footer from '../components/layout/Footer.astro';
 import AnswerBand from '../components/bands/AnswerBand.astro';
 import ReviewsBand from '../components/bands/ReviewsBand.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
+import { cardFigure, RATE_CARD_NOTICE, TRANSIT, TRANSIT_SHORT } from '../data/rate-card.js';
 import '../styles/global.css';
 
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value'], estimate: 'Sample US$430', estimateNote: '40 kg to Lagos. Sample figure for design review.', fastest: true },
-  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Tracking included', 'Insurance at 1 percent of declared value'], estimate: 'Sample US$285', estimateNote: '40 kg to Lagos. Sample figure for design review.' },
-  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Insurance at 1 percent of declared value', 'Charged by volume rather than by weight'], estimate: 'Sample US$340', estimateNote: 'One cubic metre to Lagos. Sample figure for design review.' },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: TRANSIT_SHORT.express, ticks: ['Tracking included'], ...cardFigure('express'), fastest: true },
+  { title: 'Air freight, standard', time: TRANSIT_SHORT.air, ticks: ['Tracking included'], ...cardFigure('air') },
+  { title: 'Ocean freight, consolidation', time: TRANSIT_SHORT.ocean, ticks: ['Tracking included', 'Charged by volume or weight, whichever is higher'], ...cardFigure('ocean') },
 ];
 ---
 <!DOCTYPE html>
@@ -34,7 +35,7 @@ const laneCards = [
       lead="Grandbelle International Inc moves cargo from the United States to Nigeria and West Africa, door to door, and has done it for more than twenty years."
       facts={[
         { label: 'How much', figure: 'Four fields', description: 'Destination, quantity, weight, and value return an estimate.' },
-        { label: 'How long', figure: '7 to 10 days', description: 'Business days by air, door to door. Indicative.' },
+        { label: 'How long', figure: TRANSIT_SHORT.air, description: 'Business days by air, door to door. Indicative.' },
         { label: 'Where is it now', figure: 'One field', description: 'Status without an account and without a call.', highlight: true },
       ]}
     />
@@ -91,13 +92,15 @@ const laneCards = [
       <div class="wrap band__inner">
         <div class="stack stack--tight">
           <h2 class="h2">Service levels on this corridor</h2>
-          <p class="muted measure">Fastest first. Every card carries the window, whether tracking is included, and how insurance is calculated. Figures are samples in United States dollars.</p>
+          <p class="muted measure">Fastest first. Every card carries the window, whether tracking is included, and what the figure is based on.{RATE_CARD_NOTICE ? ' Figures are samples in United States dollars.' : ''}</p>
         </div>
         <LaneCards cards={laneCards} />
-        <div class="alert alert--attention">
-          <p class="label">Sample figures for design review</p>
-          <p>Every figure on this page is a stand-in so the layout can be judged, and every figure is in United States dollars. The live figures come from the client rate card.</p>
-        </div>
+        {RATE_CARD_NOTICE && (
+          <div class="alert alert--attention">
+            <p class="label">{RATE_CARD_NOTICE.label}</p>
+            <p>{RATE_CARD_NOTICE.body}</p>
+          </div>
+        )}
       </div>
     </section>
     <section class="band">
