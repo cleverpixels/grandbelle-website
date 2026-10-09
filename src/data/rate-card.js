@@ -37,6 +37,13 @@
  * ALSO says "office quote only" — auto, full container, warehousing — that
  * is followed literally.
  *
+ * BARREL IS SETTLED, THOUGH. Barrels were not in the rate card at all, so
+ * barrel was office-quoted. On 2026-10-08 the client gave the flat rate
+ * directly — $230.00 per barrel to Lagos — and it has been written into the
+ * rate card as its own section, so barrel is now priced on the site at
+ * $241.50 displayed. It is the one figure here whose authority is a direct
+ * instruction from the client rather than a transcribed document line.
+ *
  * NOTHING HERE IS A SECRET: the estimator is a client-side React component,
  * so this module ships to the browser. Never put supplier cost or margin in
  * this file. (The rate card's "actual cost" figures are GrandBelle's selling
@@ -66,8 +73,10 @@ export const RATE_CARD_AWAITING_CONFIRMATION = [
  * actual freight, with no markup.
  *
  * The rate card states this three times and works it through for 40 kg to
- * Lagos: $260.00 actual, $13.00 markup, $288.00 displayed (their example
- * also adds $15.00 of insurance — see the note on insurance below).
+ * Lagos: $260.00 actual, $13.00 markup, $273.00 displayed. (Its worked
+ * example originally added $15.00 of insurance as well, which is why this
+ * comment used to say $288.00; the client has confirmed insurance is not
+ * included — see the note on insurance below.)
  *
  * The practical consequence, and it is a good one: the customer is quoted
  * slightly ABOVE what they are eventually invoiced. The rate card calls the
@@ -130,7 +139,10 @@ export const RATES = {
   express: { perKg: null, minimum: null }, // ⚠ blank in the rate card
   ocean: { perKg: 6.2, minimum: 0, indicative: true }, // ⚠ mean of 93 shipments
   auto: { officeOnly: true }, // rate card: "Office quote only"
-  barrel: { officeOnly: true }, // ⚠ barrels are not in the rate card at all
+  // Flat rate per barrel, given by the client on 2026-10-08. The rate card
+  // is explicit that a barrel is not charged by weight or volume, so it
+  // takes neither perKg nor the volumetric divisor — hence perBarrel.
+  barrel: { perBarrel: 230 },
 };
 
 /**
@@ -196,9 +208,9 @@ export const TRANSIT = {
   ocean: '3–4 weeks from the date of sailing',
   oceanFcl: '3–4 weeks from the date of sailing',
   auto: '3–4 weeks from the date of sailing',
-  // ⚠ Barrels are not in the rate card. The sea window is inherited from the
-  // ocean terms rather than sourced, because a barrel travels consolidated
-  // by sea; flagged so nobody reads it as a confirmed figure.
+  // Barrels now have their own section in the rate card, and it gives this
+  // window directly: "3–4 weeks from the date of sailing. Flat rate per
+  // barrel to Lagos. Door to door."
   barrel: '3–4 weeks from the date of sailing',
 };
 
@@ -275,15 +287,37 @@ export function billableKg({ actualKg, dimensionsCm } = {}) {
  * 0 is falsy, selecting it priced a car at the air per-kg rate. A service
  * with no confirmed figure must send the customer to the office instead.
  */
-export function priceConsignment({ service, destination, weightKg, dimensionsCm }) {
+export function priceConsignment({ service, destination, weightKg, dimensionsCm, barrels }) {
   const terms = RATES[service];
   if (!terms) return { kind: 'office', reason: 'unknown-service' };
   if (terms.officeOnly) return { kind: 'office', reason: 'by-design' };
-  if (typeof terms.perKg !== 'number') {
-    return { kind: 'office', reason: 'unconfirmed-rate' };
-  }
   if (!PRICED_DESTINATIONS.includes(destination)) {
     return { kind: 'office', reason: 'unquoted-destination' };
+  }
+
+  // Flat rate per unit (barrel): a COUNT, not a weight. The rate card is
+  // explicit that a barrel is a flat rate and is not charged by weight or
+  // volume, so running it through the volumetric divisor would be wrong.
+  if (typeof terms.perBarrel === 'number') {
+    const n = Number(barrels);
+    if (!Number.isFinite(n) || n < 1) {
+      return { kind: 'office', reason: 'no-quantity' };
+    }
+    const actual = terms.perBarrel * n;
+    return {
+      kind: 'figure',
+      amount: Math.round(actual * MARKUP * 100) / 100,
+      actual: Math.round(actual * 100) / 100,
+      barrels: n,
+      perBarrel: terms.perBarrel,
+      floorApplied: false,
+      indicative: Boolean(terms.indicative),
+      basis: { barrels: n },
+    };
+  }
+
+  if (typeof terms.perKg !== 'number') {
+    return { kind: 'office', reason: 'unconfirmed-rate' };
   }
 
   const billable = billableKg({ actualKg: weightKg, dimensionsCm });
@@ -291,11 +325,13 @@ export function priceConsignment({ service, destination, weightKg, dimensionsCm 
 
   const rated = terms.perKg * billable;
   const actual = Math.max(rated, terms.minimum ?? 0);
-  const amount = Math.round(actual * MARKUP);
 
+  // Rounded to the cent, not the dollar: the rate card publishes cents
+  // ($6.83, $105.00), and the first figure that is not a whole dollar —
+  // barrel's $241.50 — would otherwise be shown as $242.
   return {
     kind: 'figure',
-    amount,
+    amount: Math.round(actual * MARKUP * 100) / 100,
     actual: Math.round(actual * 100) / 100,
     billableKg: Math.round(billable * 100) / 100,
     floorApplied: rated < (terms.minimum ?? 0),
@@ -351,8 +387,8 @@ export const LIVE_CARD_FIGURES = {
     estimateNote: `Per vehicle, by size and condition. The office quotes auto shipping.`,
   },
   barrel: {
-    estimate: 'Quoted',
-    estimateNote: `Per barrel. The office quotes barrel shipments.`,
+    estimate: 'US$241.50',
+    estimateNote: `One barrel to Lagos, flat rate per barrel, from our published rate card.`,
   },
   warehousing: {
     estimate: 'Quoted',

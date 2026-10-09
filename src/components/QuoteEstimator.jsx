@@ -45,8 +45,17 @@ import {
 const OFFICE_NOTE =
   'The office confirms the figure, the departure and any duty payable before anything is charged.';
 
+/**
+ * Rendered to the cent only when there are cents to show: air is $273 and
+ * ocean $1,085, but barrel is $241.50, and rounding that to $242 would be
+ * a figure the rate card does not support.
+ */
 function money(n) {
-  return 'US$' + n.toLocaleString('en-US');
+  const cents = Math.round(n * 100) % 100 !== 0;
+  return 'US$' + n.toLocaleString('en-US', {
+    minimumFractionDigits: cents ? 2 : 0,
+    maximumFractionDigits: 2,
+  });
 }
 
 function figureText(amount) {
@@ -64,6 +73,7 @@ const OFFICE_REASON = {
   'unquoted-destination':
     'quoted by the office. We price Lagos online; the office quotes other destinations directly.',
   'no-weight': 'quoted by the office.',
+  'no-quantity': 'quoted by the office.',
   'unknown-service': 'quoted by the office.',
 };
 
@@ -83,6 +93,13 @@ function basisSentence(result) {
 
   const short = serviceOf(result.service).short;
   const dest = DEST_LABEL[result.destination];
+
+  if (result.perBarrel) {
+    const n = result.barrels;
+    const unit = n === 1 ? 'One barrel' : `${n} barrels`;
+    return `${unit} to ${dest}, at our flat rate per barrel.`;
+  }
+
   const threshold = floorThresholdKg(result.service);
 
   const base = result.floorApplied
@@ -98,6 +115,7 @@ export default function QuoteEstimator() {
   const [service, setService] = useState('air');
   const [destination, setDestination] = useState('lagos');
   const [weight, setWeight] = useState('40');
+  const [barrels, setBarrels] = useState('1');
   const [email, setEmail] = useState('');
   const [pickup, setPickup] = useState('');
   const [result, setResult] = useState(null);
@@ -107,7 +125,10 @@ export default function QuoteEstimator() {
   // A weight is only meaningful for a service, and a destination, we price.
   const officeOnly = Boolean(RATES[service]?.officeOnly);
   const destinationPriced = PRICED_DESTINATIONS.includes(destination);
-  const weightRequired = !officeOnly && destinationPriced;
+  // Barrel is a flat rate per unit, so it asks for a count and not a weight.
+  const barrelPriced = typeof RATES[service]?.perBarrel === 'number';
+  const weightRequired = !officeOnly && destinationPriced && !barrelPriced;
+  const quantityRequired = !officeOnly && destinationPriced && barrelPriced;
 
   function clearError(name) {
     setErrors((prev) => {
@@ -126,6 +147,11 @@ export default function QuoteEstimator() {
       newErrors.weight = 'Enter the weight in kilograms. The estimate needs it.';
     }
 
+    const b = parseFloat(barrels);
+    if (quantityRequired && (isNaN(b) || b < 1)) {
+      newErrors.barrels = 'Enter how many barrels. The estimate needs it.';
+    }
+
     const mail = email.trim();
     if (mail !== '' && mail.indexOf('@') < 1) {
       newErrors.email =
@@ -135,13 +161,20 @@ export default function QuoteEstimator() {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       const firstField = Object.keys(newErrors)[0];
-      if (firstField === 'weight' && weightRef.current) weightRef.current.focus();
+      if ((firstField === 'weight' || firstField === 'barrels') && weightRef.current) {
+        weightRef.current.focus();
+      }
       return;
     }
 
     setErrors({});
 
-    const priced = priceConsignment({ service, destination, weightKg: w });
+    const priced = priceConsignment({
+      service,
+      destination,
+      weightKg: w,
+      barrels: parseFloat(barrels),
+    });
 
     setResult(
       priced.kind === 'figure'
@@ -149,6 +182,8 @@ export default function QuoteEstimator() {
             kind: 'figure',
             amount: priced.amount,
             billableKg: priced.billableKg,
+            barrels: priced.barrels,
+            perBarrel: priced.perBarrel,
             floorApplied: priced.floorApplied,
             indicative: priced.indicative,
             service,
@@ -163,6 +198,7 @@ export default function QuoteEstimator() {
     setService('air');
     setDestination('lagos');
     setWeight('40');
+    setBarrels('1');
     setEmail('');
     setPickup('');
     setResult(null);
@@ -233,6 +269,32 @@ export default function QuoteEstimator() {
             </p>
             {errors.weight && (
               <p className="field__error" id="q-weight-error">{errors.weight}</p>
+            )}
+          </div>
+        ) : null}
+
+        {quantityRequired ? (
+          <div className="field">
+            <label className="field__label" htmlFor="q-barrels">Number of barrels</label>
+            <input
+              ref={weightRef}
+              className="input"
+              aria-invalid={errors.barrels ? 'true' : undefined}
+              id="q-barrels"
+              name="barrels"
+              type="number"
+              min="1"
+              step="1"
+              value={barrels}
+              inputMode="numeric"
+              onChange={(e) => { setBarrels(e.target.value); clearError('barrels'); }}
+              aria-describedby={errors.barrels ? 'q-barrels-help q-barrels-error' : 'q-barrels-help'}
+            />
+            <p className="field__help" id="q-barrels-help">
+              A flat rate per barrel. Weight and volume do not change it, so we do not ask for them.
+            </p>
+            {errors.barrels && (
+              <p className="field__error" id="q-barrels-error">{errors.barrels}</p>
             )}
           </div>
         ) : null}
