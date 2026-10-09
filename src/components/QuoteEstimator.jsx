@@ -352,7 +352,7 @@ export default function QuoteEstimator() {
             {result.kind === 'figure' ? figureText(result.amount) : 'Quoted by the office'}
           </p>
           <p className="body-sm muted" id="estimate-basis">{basisSentence(result)}</p>
-          <p className="sample-note" id="estimate-note">
+          <p className="estimate-note" id="estimate-note">
             {result.kind === 'office' ? OFFICE_NOTE : ESTIMATE_NOTE}
           </p>
         </div>
@@ -365,7 +365,7 @@ export default function QuoteEstimator() {
           <p className="body-sm muted" id="estimate-basis">
             40 kg to Lagos, standard air freight, one consignment.
           </p>
-          <p className="sample-note" id="estimate-note">{ESTIMATE_NOTE}</p>
+          <p className="estimate-note" id="estimate-note">{ESTIMATE_NOTE}</p>
         </div>
       )}
     </form>

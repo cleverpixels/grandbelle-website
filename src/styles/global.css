@@ -343,7 +343,7 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
   color: var(--brand-fg);
 }
 
-.sample-note {
+.estimate-note {
   font-size: var(--brand-text-caption-size);
   font-weight: var(--brand-text-caption-weight);
   line-height: var(--brand-text-caption-leading);
