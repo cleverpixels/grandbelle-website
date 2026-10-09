@@ -84,23 +84,30 @@ export const MARKUP = 1.05;
 export const VOLUMETRIC_DIVISOR = 6000;
 
 /**
- * ⚠ INSURANCE — the one place the rate card and a standing instruction
- * disagree. FLAGGED, NOT RESOLVED, and deliberately not implemented here.
+ * INSURANCE — RESOLVED 2026-10-08. Insurance is not included in these
+ * services, and the site does not show it.
  *
- * The rate card's worked example includes a line for insurance at 1% of
- * declared value ($15.00 on a $1,500 declaration), and the lane cards used
- * to advertise the same 1% figure. On 2026-10-08 the website lead ruled
- * that insurance be dropped from the site completely, because the estimator
- * had stopped collecting declared value at commit 81dcb22 and so nothing
- * was pricing it. That removal is committed (a4ee3c5).
+ * The rate card had priced it at 1% of declared value in its worked example,
+ * and the lane cards advertised the same figure, while the estimator had
+ * stopped collecting declared value at commit 81dcb22 — so nothing was
+ * pricing it. The website lead ruled it out on 2026-10-08, and Eviano
+ * confirmed the same day, plainly: "Drop the 'insurance included' — it is
+ * not."
  *
- * Which authority wins is a decision for the client, not for this file.
- * If insurance is reinstated, it belongs HERE and not in a page, as:
+ * The rate card itself has since been corrected to match: the insurance row
+ * is out of its worked example (which now displays $273.00 for 40 kg to
+ * Lagos, the figure this module returns), and the standard-air service
+ * description no longer claims insurance. See docs/rate-card-provenance.md
+ * in the grandbelle repo.
+ *
+ * So the client and this module now agree, and there is no conflict left to
+ * arbitrate. If insurance is ever reinstated as a priced service it belongs
+ * HERE and not in a page:
  *     const insurance = INSURANCE_RATE * declaredValue;
  *     displayed = actualFreight * MARKUP + insurance;   // markup is on
- *     // freight only — the rate card does not mark insurance up.
+ *     // freight only, per the rate card's worked example.
  */
-export const INSURANCE_POLICY = 'dropped-2026-10-08-per-website-lead';
+export const INSURANCE_POLICY = 'not-included-confirmed-by-client-2026-10-08';
 
 /* ------------------------------------------------------------------ *
  * Rates.
