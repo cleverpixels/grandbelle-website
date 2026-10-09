@@ -189,6 +189,27 @@ export const TRANSIT = {
   ocean: '3–4 weeks from the date of sailing',
   oceanFcl: '3–4 weeks from the date of sailing',
   auto: '3–4 weeks from the date of sailing',
+  // ⚠ Barrels are not in the rate card. The sea window is inherited from the
+  // ocean terms rather than sourced, because a barrel travels consolidated
+  // by sea; flagged so nobody reads it as a confirmed figure.
+  barrel: '3–4 weeks from the date of sailing',
+};
+
+/**
+ * The same windows, short enough for a card badge.
+ *
+ * The badges are what most visitors actually read, so they must not imply
+ * more than the long form. "3 to 4 weeks" on its own would read as
+ * door-to-door, which it is not — the rate card is explicit that the ocean
+ * window runs from the date of SAILING — hence "at sea".
+ */
+export const TRANSIT_SHORT = {
+  express: '2 to 5 business days',
+  air: '7 to 10 business days',
+  ocean: '3 to 4 weeks at sea',
+  oceanFcl: '3 to 4 weeks at sea',
+  auto: '3 to 4 weeks at sea',
+  barrel: '3 to 4 weeks at sea',
 };
 
 /**

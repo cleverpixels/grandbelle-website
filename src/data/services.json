@@ -13,7 +13,7 @@
       "id": "ocean-freight",
       "title": "Ocean Freight",
       "summary": "Reliable sea freight for bulk cargo, large consignments, and cost effective shipping.",
-      "transit": "4 to 6 weeks",
+      "transit": "3 to 4 weeks from the date of sailing",
       "transitVariant": "info",
       "image": "/images/ocean-freight-3x2.jpg",
       "imageAlt": "A container ship docked at the Port of Oakland"
@@ -31,7 +31,7 @@
       "id": "auto-shipping",
       "title": "Auto Shipping",
       "summary": "Secure vehicle shipping for cars moving from the United States to Nigeria and other countries.",
-      "transit": "3 to 5 weeks",
+      "transit": "3 to 4 weeks from the date of sailing",
       "transitVariant": "info",
       "image": "/images/auto-shipping-3x2.jpg",
       "imageAlt": "Rows of cars staged on the quay at a port vehicle terminal"
@@ -40,7 +40,7 @@
       "id": "warehousing",
       "title": "Warehousing",
       "summary": "Storage, package consolidation, and shipment preparation before the final leg.",
-      "transit": "Held until you release it",
+      "transit": "1 month free, then charged weekly",
       "transitVariant": "success",
       "image": "/images/warehousing-3x2.jpg",
       "imageAlt": "Warehouse staff sorting pallets and shelving in a distribution warehouse"

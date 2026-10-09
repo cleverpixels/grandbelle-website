@@ -6,29 +6,29 @@ import QuotePromptBand from '../components/bands/QuotePromptBand.astro';
 import ReviewsBand from '../components/bands/ReviewsBand.astro';
 import ServiceCard from '../components/bands/ServiceCard.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
-import { cardFigure, RATE_CARD_NOTICE } from '../data/rate-card.js';
+import { cardFigure, RATE_CARD_NOTICE, TRANSIT, TRANSIT_SHORT } from '../data/rate-card.js';
 import '../styles/global.css';
 
 const services = [
-  { title: 'Air Freight', summary: 'Fast air freight for urgent cargo, packages, and international deliveries from the United States to Nigeria and West Africa.', transit: '7 to 10 business days', transitVariant: 'info', image: '/images/air-freight-3x2.jpg', imageAlt: 'Cargo being loaded onto a freighter aircraft at an airport terminal' },
-  { title: 'Ocean Freight', summary: 'Reliable sea freight for bulk cargo, large consignments, and cost effective shipping.', transit: '4 to 6 weeks', transitVariant: 'info', image: '/images/ocean-freight-3x2.jpg', imageAlt: 'A container ship docked at the Port of Oakland' },
+  { title: 'Air Freight', summary: 'Fast air freight for urgent cargo, packages, and international deliveries from the United States to Nigeria and West Africa.', transit: TRANSIT_SHORT.air, transitVariant: 'info', image: '/images/air-freight-3x2.jpg', imageAlt: 'Cargo being loaded onto a freighter aircraft at an airport terminal' },
+  { title: 'Ocean Freight', summary: 'Reliable sea freight for bulk cargo, large consignments, and cost effective shipping.', transit: TRANSIT_SHORT.ocean, transitVariant: 'info', image: '/images/ocean-freight-3x2.jpg', imageAlt: 'A container ship docked at the Port of Oakland' },
   { title: 'Customs Clearance', summary: 'Clearance support that moves cargo through import and export requirements with fewer delays.', transit: 'Included on both routes', transitVariant: 'success', image: '/images/customs-clearance-3x2.jpg', imageAlt: 'A port worker inspecting stacked freight containers' },
-  { title: 'Auto Shipping', summary: 'Secure vehicle shipping for cars moving from the United States to Nigeria and other countries.', transit: '3 to 5 weeks', transitVariant: 'info', image: '/images/auto-shipping-3x2.jpg', imageAlt: 'Rows of cars staged on the quay at a port vehicle terminal' },
-  { title: 'Warehousing', summary: 'Storage, package consolidation, and shipment preparation before the final leg.', transit: 'Held until you release it', transitVariant: 'success', image: '/images/warehousing-3x2.jpg', imageAlt: 'Warehouse staff sorting pallets in a distribution warehouse' },
+  { title: 'Auto Shipping', summary: 'Secure vehicle shipping for cars moving from the United States to Nigeria and other countries.', transit: TRANSIT_SHORT.auto, transitVariant: 'info', image: '/images/auto-shipping-3x2.jpg', imageAlt: 'Rows of cars staged on the quay at a port vehicle terminal' },
+  { title: 'Warehousing', summary: 'Storage, package consolidation, and shipment preparation before the final leg.', transit: '1 month free, then charged weekly', transitVariant: 'success', image: '/images/warehousing-3x2.jpg', imageAlt: 'Warehouse staff sorting pallets in a distribution warehouse' },
   { title: 'Door-to-Door Delivery', summary: 'Collection at the origin address and delivery at the destination address, on both routes.', transit: 'Included on both routes', transitVariant: 'success', image: '/images/door-to-door-delivery-3x2.jpg', imageAlt: 'A delivery rider carrying a parcel in Nigeria' },
 ];
 
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included', 'Clearance and final delivery included'], ...cardFigure('express'), fastest: true },
-  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Tracking included', 'Consolidation of several orders'], ...cardFigure('air') },
-  { title: 'Ocean freight, consolidation', time: '5 to 7 weeks', ticks: ['Tracking included', 'Charged by volume rather than by weight'], ...cardFigure('ocean') },
-  { title: 'Ocean freight, full container', time: '4 to 6 weeks', ticks: ['Tracking included', 'Quoted per container'], ...cardFigure('oceanFcl') },
-  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Tracking included', 'Collected from the origin address'], ...cardFigure('auto') },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: TRANSIT_SHORT.express, ticks: ['Tracking included', 'Clearance and final delivery included'], ...cardFigure('express'), fastest: true },
+  { title: 'Air freight, standard', time: TRANSIT_SHORT.air, ticks: ['Tracking included', 'Consolidation of several orders'], ...cardFigure('air') },
+  { title: 'Ocean freight, consolidation', time: TRANSIT_SHORT.ocean, ticks: ['Tracking included', 'Charged by volume or weight, whichever is higher'], ...cardFigure('ocean') },
+  { title: 'Ocean freight, full container', time: TRANSIT_SHORT.oceanFcl, ticks: ['Tracking included', 'Quoted per container'], ...cardFigure('oceanFcl') },
+  { title: 'Auto shipping', time: TRANSIT_SHORT.auto, ticks: ['Tracking included', 'Collected from the origin address'], ...cardFigure('auto') },
   { title: 'Warehousing and consolidation', time: 'Held to release', ticks: ['Tracking included', 'Charged per consignment'], ...cardFigure('warehousing') },
 ];
 
 const faqs = [
-  { q: 'How long does shipping from the United States to Nigeria take?', a: 'By air, 7 to 10 business days door to door. By sea, 4 to 6 weeks. Both windows are indicative and are confirmed with your quote, because clearance and inland delivery vary by destination.' },
+  { q: 'How long does shipping from the United States to Nigeria take?', a: 'By air, 7 to 10 business days door to door. By sea, ' + TRANSIT.ocean + '. Both windows are indicative and are confirmed with your quote, because clearance and inland delivery vary by destination.' },
   { q: 'How much will my consignment cost?', a: 'Four fields return a figure labelled as an estimate, with the inputs it used named underneath it. Nothing is charged until you confirm the consignment.' },
   { q: 'Can I send several orders as one shipment?', a: 'Yes. Send each order to the warehouse, tell us when the last one lands, and we combine them into one consignment and quote once.' },
   { q: 'Can I ship a car?', a: 'Yes, on the auto shipping service. Vehicles travel by sea and are collected from the origin address.' },
@@ -57,7 +57,7 @@ const faqs = [
       lead="Air freight, ocean freight, customs clearance, auto shipping, warehousing, and door-to-door delivery, run as one chain with one reference number."
       facts={[
         { label: 'How much', figure: 'Four fields', description: 'Destination, quantity, weight, and value return an estimate before you contact anyone.' },
-        { label: 'How long', figure: '7 to 10 days', description: 'Business days by air, door to door. 4 to 6 weeks by sea. Indicative and confirmed with your quote.' },
+        { label: 'How long', figure: TRANSIT_SHORT.air, description: 'Business days by air, door to door. By sea, ' + TRANSIT.ocean + '. Indicative and confirmed with your quote.' },
         { label: 'Where is it now', figure: 'One field', description: 'Your tracking number returns the status without an account and without a call.', highlight: true },
       ]}
       showQuotePrompt={true}

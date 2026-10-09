@@ -3,15 +3,15 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import ReviewsBand from '../components/bands/ReviewsBand.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
-import { cardFigure, RATE_CARD_NOTICE } from '../data/rate-card.js';
+import { cardFigure, RATE_CARD_NOTICE, TRANSIT, TRANSIT_SHORT } from '../data/rate-card.js';
 import QuoteEstimator from '../components/QuoteEstimator.jsx';
 import '../styles/global.css';
 
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: '2 to 5 business days', ticks: ['Tracking included'], ...cardFigure('express'), fastest: true },
-  { title: 'Air freight, standard', time: '7 to 10 days', ticks: ['Consolidation available', 'Tracking included'], ...cardFigure('air') },
-  { title: 'Auto shipping', time: '3 to 5 weeks', ticks: ['Collected from origin address', 'Tracking included'], ...cardFigure('auto') },
-  { title: 'Barrel shipment', time: '4 to 6 weeks', ticks: ['Flat rate per barrel', 'Tracking included'], ...cardFigure('barrel') },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: TRANSIT_SHORT.express, ticks: ['Tracking included'], ...cardFigure('express'), fastest: true },
+  { title: 'Air freight, standard', time: TRANSIT_SHORT.air, ticks: ['Consolidation available', 'Tracking included'], ...cardFigure('air') },
+  { title: 'Auto shipping', time: TRANSIT_SHORT.auto, ticks: ['Collected from origin address', 'Tracking included'], ...cardFigure('auto') },
+  { title: 'Barrel shipment', time: TRANSIT_SHORT.barrel, ticks: ['Flat rate per barrel', 'Tracking included'], ...cardFigure('barrel') },
 ];
 ---
 <!DOCTYPE html>
@@ -38,8 +38,8 @@ const laneCards = [
           <div class="answerband__facts">
             <div class="fact">
               <p class="caption">How long</p>
-              <p class="fact__figure num">7 to 10 days</p>
-              <p class="fact__label body-sm">Business days by air, door to door. 4 to 6 weeks by sea. Indicative.</p>
+              <p class="fact__figure num">{TRANSIT_SHORT.air}</p>
+              <p class="fact__label body-sm">Business days by air, door to door. By sea, {TRANSIT.ocean}. Indicative.</p>
             </div>
             <div class="fact">
               <p class="caption">Paid when</p>
