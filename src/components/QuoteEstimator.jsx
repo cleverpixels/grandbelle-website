@@ -47,7 +47,7 @@ const OFFICE_NOTE =
 
 /**
  * Rendered to the cent only when there are cents to show: air is $273 and
- * ocean $1,085, but barrel is $241.50, and rounding that to $242 would be
+ * ocean $1,085, and rounding a marked-up figure such as $241.50 to $242 would be
  * a figure the rate card does not support.
  */
 function money(n) {

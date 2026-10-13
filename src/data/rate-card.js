@@ -40,8 +40,8 @@
  * BARREL IS SETTLED, THOUGH. Barrels were not in the rate card at all, so
  * barrel was office-quoted. On 2026-10-08 the client gave the flat rate
  * directly — $230.00 per barrel to Lagos — and it has been written into the
- * rate card as its own section, so barrel is now priced on the site at
- * $241.50 displayed. It is the one figure here whose authority is a direct
+ * rate card as its own section. Barrel is the ONE exception to the 5%
+ * markup: it displays $230.00, the same as its actual rate. It is the one figure here whose authority is a direct
  * instruction from the client rather than a transcribed document line.
  *
  * NOTHING HERE IS A SECRET: the estimator is a client-side React component,
@@ -304,9 +304,11 @@ export function priceConsignment({ service, destination, weightKg, dimensionsCm,
       return { kind: 'office', reason: 'no-quantity' };
     }
     const actual = terms.perBarrel * n;
+    // Barrel is the exception to the markup rule (rate card, 2026-10-12):
+    // the displayed price equals the actual flat rate.
     return {
       kind: 'figure',
-      amount: Math.round(actual * MARKUP * 100) / 100,
+      amount: Math.round(actual * 100) / 100,
       actual: Math.round(actual * 100) / 100,
       barrels: n,
       perBarrel: terms.perBarrel,
@@ -328,7 +330,7 @@ export function priceConsignment({ service, destination, weightKg, dimensionsCm,
 
   // Rounded to the cent, not the dollar: the rate card publishes cents
   // ($6.83, $105.00), and the first figure that is not a whole dollar —
-  // barrel's $241.50 — would otherwise be shown as $242.
+  // a figure like $241.50 would otherwise be shown as $242.
   return {
     kind: 'figure',
     amount: Math.round(actual * MARKUP * 100) / 100,
@@ -387,8 +389,8 @@ export const LIVE_CARD_FIGURES = {
     estimateNote: `Per vehicle, by size and condition. The office quotes auto shipping.`,
   },
   barrel: {
-    estimate: 'US$241.50',
-    estimateNote: `One barrel to Lagos, flat rate per barrel, from our published rate card.`,
+    estimate: 'US$230',
+    estimateNote: `One barrel to Lagos, flat rate per barrel with no markup, from our published rate card.`,
   },
   warehousing: {
     estimate: 'Quoted',
