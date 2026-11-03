@@ -1,0 +1,48 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import ContactLine from '../components/ContactLine.astro';
+import '../styles/global.css';
+import {
+  EMAIL,
+  PHONE_LINES_LIVE,
+  SUPPORT_PHONE,
+  WHATSAPP_PRIMARY,
+  WHATSAPP_SECONDARY,
+} from '../data/contact.js';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Track your shipment | Grandbelle International Inc</title>
+  <meta name="description" content="Online shipment tracking is not available yet. Contact Grandbelle by WhatsApp or email and we will confirm the status of your consignment.">
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <script is:inline src="https://embed.tawk.to/6aa967c3d1963a3449b3b83e/default" async></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <Header currentPage="/track/" />
+  <main id="main">
+    <section class="band">
+      <div class="wrap band__inner stack">
+        <p class="eyebrow">Shipment tracking</p>
+        <h1 class="h1">Shipment tracking is not available online yet.</h1>
+        <p class="lead">Until online tracking is available, contact us and we will confirm the status of your consignment for you.</p>
+        <p class="body-sm">Please have your consignment number ready, or the receipt we sent when your consignment was received.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href={WHATSAPP_PRIMARY.href}><ContactLine line={WHATSAPP_PRIMARY} /></a>
+          <a class="btn btn--secondary" href={EMAIL.href}>Email {EMAIL.display}</a>
+        </div>
+        {PHONE_LINES_LIVE ? (
+          <p class="body-sm muted">Or call Support <span class="phone-num">{SUPPORT_PHONE.display}</span>.</p>
+        ) : (
+          <p class="body-sm muted">Also on WhatsApp: <a href={WHATSAPP_SECONDARY.href}><span class="phone-num">{WHATSAPP_SECONDARY.display}</span></a> (secondary).</p>
+        )}
+      </div>
+    </section>
+  </main>
+  <Footer />
+</body>
+</html>

@@ -1,0 +1,23 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import '../styles/global.css';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found | Grandbelle International Inc</title>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <Header currentPage="/404/" />
+  <main id="main" class="wrap band__inner">
+    <h1 class="h1">That page is not here.</h1>
+    <p class="body-sm">Try the <a href="/">home page</a> or <a href="/get-a-quote/">price a consignment</a>.</p>
+  </main>
+  <Footer />
+</body>
+</html>

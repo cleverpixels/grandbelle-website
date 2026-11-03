@@ -1,4 +1,14 @@
 ---
+import {
+  CONTACT_LINES,
+  PHONE_LINES_LIVE,
+  SUPPORT_PHONE,
+  WHATSAPP_PRIMARY,
+  WHATSAPP_SECONDARY,
+  lineLabel,
+} from '../../data/contact.js';
+import ContactLine from '../ContactLine.astro';
+
 interface Props {
   currentPage?: string;
 }
@@ -34,8 +44,14 @@ const navLinks = [
       </ul>
     </nav>
     <span class="nav__spacer"></span>
-    <a class="nav__support" href="tel:+15162565666">Support +1 (516) 256-5666</a>
-    <a class="nav__support" href="#account">Account</a>
+    {PHONE_LINES_LIVE ? (
+      <a class="nav__support" href={SUPPORT_PHONE.href}>{SUPPORT_PHONE.label}</a>
+    ) : (
+      <span class="nav__support nav__support--lines">
+        <a href={WHATSAPP_PRIMARY.href}>{lineLabel(WHATSAPP_PRIMARY)}</a>
+        <a href={WHATSAPP_SECONDARY.href}>{lineLabel(WHATSAPP_SECONDARY)}</a>
+      </span>
+    )}
     <a class="btn btn--primary header__action" href="/get-a-quote/">Get a quote</a>
     <details class="drawer">
       <summary>Menu</summary>
@@ -46,8 +62,9 @@ const navLinks = [
               <a class="nav__link" href={link.href}>{link.label}</a>
             </li>
           ))}
-          <li><a class="nav__link" href="tel:+15162565666">Support +1 (516) 256-5666</a></li>
-          <li><a class="nav__link" href="#account">Account</a></li>
+          {CONTACT_LINES.map(line => (
+            <li><a class="nav__link" href={line.href}><ContactLine line={line} /></a></li>
+          ))}
         </ul>
       </nav>
     </details>

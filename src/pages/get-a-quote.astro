@@ -1,17 +1,23 @@
 ---
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import ReviewsBand from '../components/bands/ReviewsBand.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
 import { cardFigure, RATE_CARD_NOTICE, TRANSIT, TRANSIT_SHORT } from '../data/rate-card.js';
 import QuoteEstimator from '../components/QuoteEstimator.jsx';
+import ContactLine from '../components/ContactLine.astro';
+import {
+  PHONE_LINES_LIVE,
+  SUPPORT_PHONE,
+  WHATSAPP_PRIMARY,
+  WHATSAPP_SECONDARY,
+} from '../data/contact.js';
 import '../styles/global.css';
 
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: TRANSIT_SHORT.express, ticks: ['Tracking included'], ...cardFigure('express'), fastest: true },
-  { title: 'Air freight, standard', time: TRANSIT_SHORT.air, ticks: ['Consolidation available', 'Tracking included'], ...cardFigure('air') },
-  { title: 'Auto shipping', time: TRANSIT_SHORT.auto, ticks: ['Collected from origin address', 'Tracking included'], ...cardFigure('auto') },
-  { title: 'Barrel shipment', time: TRANSIT_SHORT.barrel, ticks: ['Flat rate per barrel', 'Tracking included'], ...cardFigure('barrel') },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: TRANSIT_SHORT.express, ...cardFigure('express'), fastest: true },
+  { title: 'Air freight, standard', time: TRANSIT_SHORT.air, ticks: ['Consolidation available'], ...cardFigure('air') },
+  { title: 'Auto shipping', time: TRANSIT_SHORT.auto, ticks: ['Collected from origin address'], ...cardFigure('auto') },
+  { title: 'Barrel shipment', time: TRANSIT_SHORT.barrel, ticks: ['Flat rate per barrel'], ...cardFigure('barrel') },
 ];
 ---
 <!DOCTYPE html>
@@ -20,7 +26,7 @@ const laneCards = [
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Get a quote | Grandbelle International Inc</title>
-  <meta name="description" content="Price a consignment from the United States to Nigeria and West Africa. Four fields, a figure labelled as an estimate, and no account required.">
+  <meta name="description" content="Price a consignment from the United States to Nigeria and West Africa. Choose the service, the destination and the weight, and the estimate appears beside the form. No account required.">
   <link rel="preconnect" href="/fonts/roboto-slab-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preconnect" href="/fonts/roboto-400-500-600.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/fonts/fonts.css">
@@ -34,7 +40,7 @@ const laneCards = [
       <div class="wrap answerband__inner">
         <div class="stack stack--wide answerband__text">
           <p class="eyebrow">Get a quote</p>
-          <h1 class="h1">Four fields, and a figure <span>labelled as an estimate</span>.</h1>
+          <h1 class="h1">An estimate beside the form, <span>before you speak to anyone</span>.</h1>
           <div class="answerband__facts">
             <div class="fact">
               <p class="caption">How long</p>
@@ -46,27 +52,16 @@ const laneCards = [
               <p class="fact__figure num">On confirmation</p>
               <p class="fact__label body-sm">Nothing is charged until the figure is confirmed and the consignment is booked.</p>
             </div>
-            <div class="fact fact--now">
-              <p class="caption">Where is it now</p>
-              <p class="fact__figure num">One field</p>
-              <p class="fact__label body-sm">The same page, once the consignment is on its way. No login.</p>
-            </div>
           </div>
           <p class="lead">No account, no payment, and no telephone call required. Enter the consignment and the estimate appears beside it, with the inputs it was calculated from named underneath.</p>
         </div>
         <div class="answerband__card">
           <QuoteEstimator client:load />
-          <form class="stack" method="get" action="#tracking" role="search">
-            <h2 class="h4">Or track a shipment</h2>
-            <div class="form-row">
-              <div class="field">
-                <label class="field__label" for="tracking-quote">Tracking number</label>
-                <input class="input" id="tracking-quote" name="tracking" type="text" autocomplete="off" placeholder="Enter your tracking number" aria-describedby="tracking-help-quote">
-              </div>
-              <button class="btn btn--secondary" type="submit">Track</button>
-            </div>
-            <p class="field__help" id="tracking-help-quote">No account is needed. The number is on the receipt we send when a consignment is received.</p>
-          </form>
+          <div class="stack stack--tight">
+            <h2 class="h4">Send the details on WhatsApp</h2>
+            <p class="body-sm muted">The figure above is an estimate, not a booking. Send the same details to the office on WhatsApp and they will confirm the figure and the departure.</p>
+            <a class="btn btn--primary" href={WHATSAPP_PRIMARY.href} data-quote-request><ContactLine line={WHATSAPP_PRIMARY} /></a>
+          </div>
         </div>
       </div>
     </section>
@@ -101,7 +96,7 @@ const laneCards = [
       <div class="wrap band__inner">
         <div class="stack stack--tight">
           <h2 class="h2">Service levels, fastest first</h2>
-          <p class="muted measure">The same cards the homepage carries. Choose a level here and set the service field above to match.{RATE_CARD_NOTICE ? ' Figures are samples in United States dollars.' : ''}</p>
+          <p class="muted measure">Choose a level here, then set the service above to match.{RATE_CARD_NOTICE ? ' Figures are samples in United States dollars.' : ''}</p>
         </div>
         <LaneCards cards={laneCards} />
         {RATE_CARD_NOTICE && (
@@ -113,13 +108,15 @@ const laneCards = [
       </div>
     </section>
 
-    <ReviewsBand />
-
     <section class="band">
       <div class="wrap band__inner">
         <div class="stack stack--tight">
-          <p class="label">Prefer to speak to someone</p>
-          <p class="body-sm">The telephone and WhatsApp entries sit second to the estimate, not in place of it. <a href="tel:+15162565666">+1 (516) 256-5666</a>.</p>
+          <p class="label">{PHONE_LINES_LIVE ? 'Prefer to speak to someone' : 'Prefer to message someone'}</p>
+          {PHONE_LINES_LIVE ? (
+            <p class="body-sm">The telephone and WhatsApp entries sit second to the estimate, not in place of it. <a href={SUPPORT_PHONE.href}><span class="phone-num">{SUPPORT_PHONE.display}</span></a>.</p>
+          ) : (
+            <p class="body-sm">The estimate above is a figure, not a booking. Send it to the office on WhatsApp and they will confirm it: primary <span class="phone-num">{WHATSAPP_PRIMARY.display}</span>, secondary <a href={WHATSAPP_SECONDARY.href}><span class="phone-num">{WHATSAPP_SECONDARY.display}</span></a>.</p>
+          )}
         </div>
       </div>
     </section>

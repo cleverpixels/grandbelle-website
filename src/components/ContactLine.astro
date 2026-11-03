@@ -1,0 +1,22 @@
+---
+/**
+ * One contact line, e.g. "WhatsApp +1 (516) 554-2016 (secondary)".
+ *
+ * The number itself is wrapped in <span class="phone-num"> so it can never be
+ * broken across two lines; the introducing word and the role in brackets wrap
+ * onto their own lines when the column is narrow. The wrapper <span> also
+ * keeps this to a single flex item inside .btn and .nav__link, which are both
+ * inline-flex — several top-level nodes there would pick up the flex gap and
+ * stop wrapping as one sentence.
+ */
+import { lineParts } from '../data/contact.js';
+
+interface Props {
+  line: { display: string; label: string; role?: string | null };
+  class?: string;
+}
+
+const { line, class: className } = Astro.props;
+const { lead, number, role } = lineParts(line);
+---
+<span class:list={['contact-line', className]}>{lead} <span class="phone-num">{number}</span>{role ? ` (${role})` : ''}</span>

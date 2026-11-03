@@ -1,0 +1,150 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { WHATSAPP_LINES } from '../data/contact.js';
+import ContactLine from '../components/ContactLine.astro';
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop and ship | Grandbelle International Inc</title>
+  <meta name="description" content="Buy from US stores and have it forwarded to Nigeria or West Africa: use our New York address at checkout, or send us the product link and we buy it for you.">
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <script is:inline src="https://embed.tawk.to/6aa967c3d1963a3449b3b83e/default" async></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <Header currentPage="/shop-and-ship/" />
+  <main id="main">
+    <section class="band band--surface">
+      <div class="wrap band__inner stack">
+        <p class="eyebrow">Shop and ship</p>
+        <h1 class="h1">Shop from US stores, ship with Grandbelle.</h1>
+        <p class="lead measure">Use our New York address at checkout and we forward your package, or send us the link and we buy it for you.</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">Two ways to shop with us</h2>
+          <p class="muted measure">Choose the one that matches what you are buying.</p>
+        </div>
+        <div class="grid offers">
+          <article class="card stack">
+            <div class="stack stack--tight">
+              <p class="label">Option one</p>
+              <h3 class="h3">Use our US address</h3>
+            </div>
+            <p class="card__body">Shop from the online stores you already use, such as Amazon, eBay, Walmart, Shein and Temu, and use our warehouse address as your shipping address. When your package arrives we forward it to Nigeria or West Africa.</p>
+            <div class="stack stack--tight">
+              <p class="label">How it works</p>
+              <ol class="steps">
+                <li>Shop at any online store.</li>
+                <li>At checkout, use the address below, with your own first and last name on the first line.</li>
+                <li>Message us on WhatsApp to confirm your shipping details and pay your invoice.</li>
+                <li>We receive your package and forward it.</li>
+              </ol>
+            </div>
+            <div class="stack stack--tight">
+              <p class="label">The address to use</p>
+              <address class="ship-address body-sm">
+                Your first name and last name<br>
+                Grandbelle International, Inc.<br>
+                Airport Industrial Office Park<br>
+                145 Hook Creek Blvd, B6A<br>
+                Valley Stream, NY 11581, United States
+              </address>
+            </div>
+            <p class="card__meta">Best if you already know what you want to buy.</p>
+          </article>
+
+          <article class="card stack">
+            <div class="stack stack--tight">
+              <p class="label">Option two</p>
+              <h3 class="h3">We buy it for you</h3>
+            </div>
+            <p class="card__body">Send us the link to the item. We check that it is available, buy it, receive it at our warehouse and ship it to you.</p>
+            <div class="stack stack--tight">
+              <p class="label">How it works</p>
+              <ol class="steps">
+                <li>Send us the product link on WhatsApp.</li>
+                <li>We check and confirm the item.</li>
+                <li>We buy it for you.</li>
+                <li>We ship it to you.</li>
+              </ol>
+            </div>
+            <p class="card__meta">Best if you want help with the purchase.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band--navy">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">Ready to shop from the US?</h2>
+          <p class="body-sm">Message the office on WhatsApp with the details.</p>
+        </div>
+        <div class="btn-row">
+          {WHATSAPP_LINES.map((line, i) => (
+            <a class={i === 0 ? 'btn btn--primary' : 'btn btn--secondary'} href={line.href}><ContactLine line={line} /></a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</body>
+</html>
+
+<style>
+  .offers { grid-template-columns: 1fr; align-items: start; }
+  @media (min-width: 900px) {
+    .offers { grid-template-columns: repeat(2, 1fr); align-items: start; }
+  }
+
+  .steps {
+    counter-reset: step;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--brand-space-3);
+  }
+  .steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: var(--brand-space-6) 1fr;
+    gap: var(--brand-space-3);
+    align-items: start;
+    color: var(--brand-muted);
+  }
+  .steps li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--brand-font-body);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--brand-text-caption-size);
+    font-weight: var(--brand-text-label-weight);
+    line-height: var(--brand-text-body-leading);
+    color: var(--brand-primary);
+  }
+
+  .ship-address {
+    font-style: normal;
+    padding: var(--brand-space-4);
+    background: var(--brand-surface);
+    border-left: var(--brand-border-thick) solid var(--brand-primary);
+    border-radius: var(--brand-radius-sm);
+  }
+
+  /* The secondary button is drawn for light bands; on the navy band its ink and
+     border would disappear. Lighten both so the second WhatsApp line is legible. */
+  .band--navy .btn--secondary { border-color: var(--brand-dark-surface-link); color: var(--brand-neutral-0); }
+  .band--navy .btn--secondary:hover,
+  .band--navy .btn--secondary:active { border-color: var(--brand-neutral-0); color: var(--brand-neutral-0); }
+</style>

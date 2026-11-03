@@ -3,7 +3,7 @@ interface LaneCard {
   eyebrow?: string;
   title: string;
   time: string;
-  ticks: string[];
+  ticks?: string[];
   estimate: string;
   estimateNote: string;
   fastest?: boolean;
@@ -22,14 +22,16 @@ const { cards } = Astro.props;
       {card.eyebrow && <p class="eyebrow">{card.eyebrow}</p>}
       <h3 class="h4">{card.title}</h3>
       <p class="lane-card__time num">{card.time}</p>
-      <ul class="tick-list">
-        {card.ticks.map(tick => (
-          <li>
-            <span class="tick" aria-hidden="true">&#10003;</span>
-            <span>{tick}</span>
-          </li>
-        ))}
-      </ul>
+      {card.ticks && card.ticks.length > 0 && (
+        <ul class="tick-list">
+          {card.ticks.map(tick => (
+            <li>
+              <span class="tick" aria-hidden="true">&#10003;</span>
+              <span>{tick}</span>
+            </li>
+          ))}
+        </ul>
+      )}
       <div class="lane-card__estimate">
         <p class="lane-card__figure num">{card.estimate}</p>
         <p class="caption muted">{card.estimateNote}</p>
