@@ -529,6 +529,7 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
   position: absolute;
   inset-inline-start: var(--brand-space-3);
   inset-block-end: var(--brand-space-3);
+  max-width: calc(100% - (var(--brand-space-3) * 2));
   margin: 0;
   padding: 0.25rem 0.5rem;
   border-radius: var(--brand-radius-xs);
