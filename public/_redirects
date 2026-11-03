@@ -27,5 +27,5 @@
 /track-your-package         /track/    301
 /blogs/                     /          301
 /blogs                      /          301
-/shop-ship-with-grandbelle/ /          301
-/shop-ship-with-grandbelle  /          301
+/shop-ship-with-grandbelle/ /shop-and-ship/ 301
+/shop-ship-with-grandbelle  /shop-and-ship/ 301
