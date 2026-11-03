@@ -826,7 +826,14 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
   .brand__lockup { display: block; }
 }
 .nav { display: none; }
-.nav__list { display: flex; align-items: center; gap: var(--brand-space-6); margin: 0; padding: 0; list-style: none; }
+/* Five links (Services, Shop & ship, Ship a car, Track a shipment, About) have
+   to sit on one line with the Get a quote button; the gap is 16px rather than
+   24px so the bar still fits at 1024px. The bar's own links never wrap — the
+   collapse breakpoints below are measured so a label never has to. Scoped to
+   .nav so the drawer's contact links keep wrapping their "WhatsApp" lead and
+   role the way they always have; the number itself is .phone-num (nowrap). */
+.nav__list { display: flex; align-items: center; flex-wrap: nowrap; gap: var(--brand-space-4); margin: 0; padding: 0; list-style: none; }
+.nav .nav__link { white-space: nowrap; }
 .nav__link {
   display: inline-flex; align-items: center; min-height: var(--brand-space-12);
   padding-inline: var(--brand-space-2);
@@ -891,11 +898,20 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
 }
 .drawer__list { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--brand-space-2); }
 .drawer__list .nav__link { width: 100%; }
-@media (min-width: 768px) {
+/* Collapse rules, measured 2026-11-03 on the built site at 1440/1280/1100/1024/
+   768/390/320 (see the nav card t_3f26d3a5):
+   - below 1024 the bar cannot hold brand + five links + Menu, so the five links
+     live in the Menu drawer only — the same drawer the phone lines use below
+     1280. No halfway state where a link would wrap or be cut off.
+   - 1024..1279: five links + Get a quote button + Menu (the drawer carries the
+     WhatsApp lines at these widths).
+   - 1280 and up: the WhatsApp lines fit beside the button, so the drawer is no
+     longer needed and is hidden. */
+@media (min-width: 1024px) {
   .nav { display: flex; flex: 1 1 auto; align-items: center; gap: var(--brand-space-6); }
 }
 @media (min-width: 1024px) { .header__action { display: inline-flex; } }
-@media (min-width: 1440px) {
+@media (min-width: 1280px) {
   .nav__support { display: inline-flex; }
   .drawer { display: none; }
 }
