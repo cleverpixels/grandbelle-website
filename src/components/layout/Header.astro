@@ -51,7 +51,6 @@ const navLinks = [
         <a href={WHATSAPP_SECONDARY.href}>{lineLabel(WHATSAPP_SECONDARY)}</a>
       </span>
     )}
-    <a class="nav__support" href="#account">Account</a>
     <a class="btn btn--primary header__action" href="/get-a-quote/">Get a quote</a>
     <details class="drawer">
       <summary>Menu</summary>
@@ -65,7 +64,6 @@ const navLinks = [
           {CONTACT_LINES.map(line => (
             <li><a class="nav__link" href={line.href}>{lineLabel(line)}</a></li>
           ))}
-          <li><a class="nav__link" href="#account">Account</a></li>
         </ul>
       </nav>
     </details>
