@@ -575,6 +575,23 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
   white-space: nowrap;
   pointer-events: none;
 }
+/* Narrow 21:9 band: chip instead of sash.
+   At 390px the shipping band is 262 x 112 CSS. A 45-degree sash carrying a
+   10px word has a 71 x 71 AABB and its lower-left tail runs to y=97 of 112,
+   so it crowds the frame and sits next to the worker. Below 500px that band
+   only, the label becomes a flat chip flush in the top-left corner: square
+   against the image edge (no translate, no rotation, no radius), the same
+   navy at the same 0.72 alpha and the same white type. The six home service
+   cards keep the sash at every width, so the override is scoped to
+   .media-ribbon--band, which only the shipping band carries. */
+@media (max-width: 499.98px) {
+  .media-ribbon--band {
+    top: 0;
+    left: 0;
+    transform: none;
+    padding: 0.3rem 0.7rem;
+  }
+}
 .band--dark .media { color: var(--brand-neutral-0); }
 
 /* Link colours on surfaces */
