@@ -598,7 +598,7 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
 
 .answerband__facts { display: grid; gap: var(--brand-space-2); }
 @media (min-width: 768px) {
-  .answerband__facts { grid-template-columns: repeat(3, 1fr); gap: var(--brand-space-4); }
+  .answerband__facts { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--brand-space-4); }
 }
 
 .fact {

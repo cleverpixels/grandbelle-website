@@ -1,17 +1,18 @@
 ---
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import ReviewsBand from '../components/bands/ReviewsBand.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
 import { cardFigure, RATE_CARD_NOTICE, TRANSIT, TRANSIT_SHORT } from '../data/rate-card.js';
 import QuoteEstimator from '../components/QuoteEstimator.jsx';
 import '../styles/global.css';
 
+const whatsappUrl = 'https://wa.me/13477128862';
+
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: TRANSIT_SHORT.express, ticks: ['Tracking included'], ...cardFigure('express'), fastest: true },
-  { title: 'Air freight, standard', time: TRANSIT_SHORT.air, ticks: ['Consolidation available', 'Tracking included'], ...cardFigure('air') },
-  { title: 'Auto shipping', time: TRANSIT_SHORT.auto, ticks: ['Collected from origin address', 'Tracking included'], ...cardFigure('auto') },
-  { title: 'Barrel shipment', time: TRANSIT_SHORT.barrel, ticks: ['Flat rate per barrel', 'Tracking included'], ...cardFigure('barrel') },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: TRANSIT_SHORT.express, ...cardFigure('express'), fastest: true },
+  { title: 'Air freight, standard', time: TRANSIT_SHORT.air, ticks: ['Consolidation available'], ...cardFigure('air') },
+  { title: 'Auto shipping', time: TRANSIT_SHORT.auto, ticks: ['Collected from origin address'], ...cardFigure('auto') },
+  { title: 'Barrel shipment', time: TRANSIT_SHORT.barrel, ticks: ['Flat rate per barrel'], ...cardFigure('barrel') },
 ];
 ---
 <!DOCTYPE html>
@@ -46,27 +47,16 @@ const laneCards = [
               <p class="fact__figure num">On confirmation</p>
               <p class="fact__label body-sm">Nothing is charged until the figure is confirmed and the consignment is booked.</p>
             </div>
-            <div class="fact fact--now">
-              <p class="caption">Where is it now</p>
-              <p class="fact__figure num">One field</p>
-              <p class="fact__label body-sm">The same page, once the consignment is on its way. No login.</p>
-            </div>
           </div>
           <p class="lead">No account, no payment, and no telephone call required. Enter the consignment and the estimate appears beside it, with the inputs it was calculated from named underneath.</p>
         </div>
         <div class="answerband__card">
           <QuoteEstimator client:load />
-          <form class="stack" method="get" action="#tracking" role="search">
-            <h2 class="h4">Or track a shipment</h2>
-            <div class="form-row">
-              <div class="field">
-                <label class="field__label" for="tracking-quote">Tracking number</label>
-                <input class="input" id="tracking-quote" name="tracking" type="text" autocomplete="off" placeholder="Enter your tracking number" aria-describedby="tracking-help-quote">
-              </div>
-              <button class="btn btn--secondary" type="submit">Track</button>
-            </div>
-            <p class="field__help" id="tracking-help-quote">No account is needed. The number is on the receipt we send when a consignment is received.</p>
-          </form>
+          <div class="stack stack--tight">
+            <h2 class="h4">Send the details on WhatsApp</h2>
+            <p class="body-sm muted">The figure above is an estimate, not a booking. Send the same details to the office on WhatsApp and they will confirm the figure and the departure.</p>
+            <a class="btn btn--primary" href={whatsappUrl} data-quote-request>WhatsApp +1 (347) 712-8862</a>
+          </div>
         </div>
       </div>
     </section>
@@ -112,8 +102,6 @@ const laneCards = [
         )}
       </div>
     </section>
-
-    <ReviewsBand />
 
     <section class="band">
       <div class="wrap band__inner">

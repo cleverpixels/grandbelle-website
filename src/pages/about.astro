@@ -2,15 +2,14 @@
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import AnswerBand from '../components/bands/AnswerBand.astro';
-import ReviewsBand from '../components/bands/ReviewsBand.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
 import { cardFigure, RATE_CARD_NOTICE, TRANSIT, TRANSIT_SHORT } from '../data/rate-card.js';
 import '../styles/global.css';
 
 const laneCards = [
-  { eyebrow: 'Fastest', title: 'Air freight, express', time: TRANSIT_SHORT.express, ticks: ['Tracking included'], ...cardFigure('express'), fastest: true },
-  { title: 'Air freight, standard', time: TRANSIT_SHORT.air, ticks: ['Tracking included'], ...cardFigure('air') },
-  { title: 'Ocean freight, consolidation', time: TRANSIT_SHORT.ocean, ticks: ['Tracking included', 'Charged by volume or weight, whichever is higher'], ...cardFigure('ocean') },
+  { eyebrow: 'Fastest', title: 'Air freight, express', time: TRANSIT_SHORT.express, ...cardFigure('express'), fastest: true },
+  { title: 'Air freight, standard', time: TRANSIT_SHORT.air, ...cardFigure('air') },
+  { title: 'Ocean freight, consolidation', time: TRANSIT_SHORT.ocean, ticks: ['Charged by volume or weight, whichever is higher'], ...cardFigure('ocean') },
 ];
 ---
 <!DOCTYPE html>
@@ -19,7 +18,7 @@ const laneCards = [
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>About Grandbelle International Inc | Two offices, one corridor</title>
-  <meta name="description" content="Grandbelle International Inc has worked the United States to Nigeria and West Africa corridor for more than twenty years, with one office at the origin and one at the destination.">
+  <meta name="description" content="Grandbelle International Inc works the United States to Nigeria and West Africa corridor, with one office at the origin and one at the destination.">
   <link rel="preconnect" href="/fonts/roboto-slab-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preconnect" href="/fonts/roboto-400-500-600.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/fonts/fonts.css">
@@ -32,11 +31,10 @@ const laneCards = [
     <AnswerBand
       eyebrow="About Grandbelle International Inc"
       heading="Two offices, one corridor, and the same two sets of names on the paperwork."
-      lead="Grandbelle International Inc moves cargo from the United States to Nigeria and West Africa, door to door, and has done it for more than twenty years."
+      lead="Grandbelle International Inc moves cargo from the United States to Nigeria and West Africa, door to door, with one office at each end."
       facts={[
         { label: 'How much', figure: 'Four fields', description: 'Destination, quantity, weight, and value return an estimate.' },
         { label: 'How long', figure: TRANSIT_SHORT.air, description: 'Business days by air, door to door. Indicative.' },
-        { label: 'Where is it now', figure: 'One field', description: 'Status without an account and without a call.', highlight: true },
       ]}
     />
     <section class="band">
@@ -50,7 +48,7 @@ const laneCards = [
             </div>
             <div class="stack">
               <h2 class="h2">What that means in practice</h2>
-              <p class="muted">It means the answer to "where is it now" is a status rather than a person's recollection. It means the answer to "how much" arrives before a payment and before an account. It means the answer to "how long" is printed on the page rather than promised on a call. None of that is a technology problem. The live site already has a login, a cargo manager, and a working tracking form. The problem is that none of them is where a visitor meets them.</p>
+              <p class="muted">It means the answer to "where is it now" is a status rather than a person's recollection. It means the answer to "how much" arrives before a payment and before an account. It means the answer to "how long" is printed on the page rather than promised on a call. None of that is a technology problem. It is a question of what a visitor meets first.</p>
             </div>
           </div>
           <div class="stack">
@@ -65,26 +63,8 @@ const laneCards = [
     <section class="band band--surface">
       <div class="wrap band__inner">
         <div class="stack stack--tight">
-          <h2 class="h2">The company in four numbers</h2>
-          <p class="muted">Each figure is published by the client on their own site today.</p>
-        </div>
-        <div class="grid grid--steps">
-          <div class="card">
-            <p class="fact__figure num">23+</p>
-            <p class="card__body">Years working the United States to Nigeria corridor, through several changes of carrier and customs regime.</p>
-          </div>
-          <div class="card">
-            <p class="fact__figure num">55K+</p>
-            <p class="card__body">Consignments moved, from single packages to full containers and vehicles.</p>
-          </div>
-          <div class="card">
-            <p class="fact__figure num">2</p>
-            <p class="card__body">Offices, one at each end of the route, so a consignment is handed over twice by the same company.</p>
-          </div>
-          <div class="card">
-            <p class="fact__figure num">6</p>
-            <p class="card__body">Services, air freight through to the final delivery, run as one chain rather than six vendors.</p>
-          </div>
+          <h2 class="h2">Two offices, six services</h2>
+          <p class="muted measure">One office at each end of the route, so a consignment is handed over twice by the same company. Six services, air freight through to the final delivery, run as one chain rather than six vendors. Both counts are visible on this site: the six services on the homepage, and the two addresses further down this page.</p>
         </div>
       </div>
     </section>
@@ -92,7 +72,7 @@ const laneCards = [
       <div class="wrap band__inner">
         <div class="stack stack--tight">
           <h2 class="h2">Service levels on this corridor</h2>
-          <p class="muted measure">Fastest first. Every card carries the window, whether tracking is included, and what the figure is based on.{RATE_CARD_NOTICE ? ' Figures are samples in United States dollars.' : ''}</p>
+          <p class="muted measure">Fastest first. Every card carries the window and what the figure is based on.{RATE_CARD_NOTICE ? ' Figures are samples in United States dollars.' : ''}</p>
         </div>
         <LaneCards cards={laneCards} />
         {RATE_CARD_NOTICE && (
