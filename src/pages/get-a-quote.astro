@@ -4,9 +4,13 @@ import Footer from '../components/layout/Footer.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
 import { cardFigure, RATE_CARD_NOTICE, TRANSIT, TRANSIT_SHORT } from '../data/rate-card.js';
 import QuoteEstimator from '../components/QuoteEstimator.jsx';
+import {
+  PHONE_LINES_LIVE,
+  SUPPORT_PHONE,
+  WHATSAPP_PRIMARY,
+  WHATSAPP_SECONDARY,
+} from '../data/contact.js';
 import '../styles/global.css';
-
-const whatsappUrl = 'https://wa.me/13477128862';
 
 const laneCards = [
   { eyebrow: 'Fastest', title: 'Air freight, express', time: TRANSIT_SHORT.express, ...cardFigure('express'), fastest: true },
@@ -55,7 +59,7 @@ const laneCards = [
           <div class="stack stack--tight">
             <h2 class="h4">Send the details on WhatsApp</h2>
             <p class="body-sm muted">The figure above is an estimate, not a booking. Send the same details to the office on WhatsApp and they will confirm the figure and the departure.</p>
-            <a class="btn btn--primary" href={whatsappUrl} data-quote-request>WhatsApp +1 (347) 712-8862</a>
+            <a class="btn btn--primary" href={WHATSAPP_PRIMARY.href} data-quote-request>{WHATSAPP_PRIMARY.label}</a>
           </div>
         </div>
       </div>
@@ -106,8 +110,12 @@ const laneCards = [
     <section class="band">
       <div class="wrap band__inner">
         <div class="stack stack--tight">
-          <p class="label">Prefer to speak to someone</p>
-          <p class="body-sm">The telephone and WhatsApp entries sit second to the estimate, not in place of it. <a href="tel:+15162565666">+1 (516) 256-5666</a>.</p>
+          <p class="label">{PHONE_LINES_LIVE ? 'Prefer to speak to someone' : 'Prefer to message someone'}</p>
+          {PHONE_LINES_LIVE ? (
+            <p class="body-sm">The telephone and WhatsApp entries sit second to the estimate, not in place of it. <a href={SUPPORT_PHONE.href}>{SUPPORT_PHONE.display}</a>.</p>
+          ) : (
+            <p class="body-sm">The estimate above is a figure, not a booking. Send it to the office on WhatsApp and they will confirm it: primary {WHATSAPP_PRIMARY.display}, secondary <a href={WHATSAPP_SECONDARY.href}>{WHATSAPP_SECONDARY.display}</a>.</p>
+          )}
         </div>
       </div>
     </section>

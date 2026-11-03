@@ -4,6 +4,7 @@ import Footer from '../components/layout/Footer.astro';
 import AnswerBand from '../components/bands/AnswerBand.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
 import { cardFigure, RATE_CARD_NOTICE, TRANSIT, TRANSIT_SHORT } from '../data/rate-card.js';
+import { CONTACT_LINES, EMAIL, PHONE_LINES_LIVE, lineLabel } from '../data/contact.js';
 import '../styles/global.css';
 
 const laneCards = [
@@ -102,8 +103,10 @@ const laneCards = [
           </div>
           <div class="card">
             <h3 class="h4">Contact</h3>
-            <p class="card__body"><a href="tel:+15162565666">+1 (516) 256-5666</a><br><a href="https://wa.me/13477128862">WhatsApp +1 (347) 712-8862</a><br><a href="mailto:info@grandbelleinternational.com">info@grandbelleinternational.com</a></p>
-            <p class="card__meta">Support, WhatsApp, and email</p>
+            <p class="card__body">{CONTACT_LINES.map(line => (
+              <Fragment><a href={line.href}>{line.role ? lineLabel(line) : line.display}</a><br /></Fragment>
+            ))}<a href={EMAIL.href}>{EMAIL.display}</a></p>
+            <p class="card__meta">{PHONE_LINES_LIVE ? 'Support, WhatsApp, and email' : 'WhatsApp and email'}</p>
           </div>
         </div>
         <div class="btn-row" style="margin-top: 32px;">

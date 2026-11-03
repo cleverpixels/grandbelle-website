@@ -828,6 +828,16 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
   text-decoration: none;
 }
 .nav__support:hover { color: var(--brand-primary); }
+/* Header bar contact slot while the phones are down (see src/data/contact.js):
+   the two WhatsApp lines stack in one column so the pair is no wider than a
+   single number and cannot push the nav links or the quote button onto a
+   second row at 1440px. */
+.nav__support--lines {
+  flex-direction: column; align-items: flex-start; justify-content: center;
+  gap: 2px; min-height: 0;
+}
+.nav__support--lines a { color: inherit; text-decoration: none; white-space: nowrap; }
+.nav__support--lines a:hover { color: var(--brand-primary); }
 .drawer { flex: 1 1 auto; margin-left: auto; }
 .header__action { display: none; flex: 0 0 auto; white-space: nowrap; }
 .drawer > summary {
