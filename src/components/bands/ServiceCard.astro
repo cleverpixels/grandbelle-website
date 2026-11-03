@@ -4,24 +4,27 @@ interface Props {
   body: string;
   badge?: string;
   badgeVariant?: 'info' | 'success' | 'warning' | 'error';
-  imageSrc?: string;
-  imageAlt?: string;
+  imageSrc: string;
+  imageAlt: string;
 }
 const { title, body, badge, badgeVariant = 'info', imageSrc, imageAlt } = Astro.props;
+
+// No placeholder branch: a card without an image used to render the words
+// "Photography placeholder / Client photography to supply". That branch is
+// gone, so a missing image must stop the build instead of shipping.
+if (!imageSrc) {
+  throw new Error(
+    `ServiceCard "${title}" has no imageSrc. Every card must carry a real image; the placeholder branch was removed on purpose.`,
+  );
+}
 ---
 
 <article class="plate">
-  {imageSrc ? (
-    <div class="plate__media">
-      <img src={imageSrc} width="1200" height="800" alt={imageAlt || ''}>
-    </div>
-  ) : (
-    <div class="plate__media">
-      <div class="media">
-        <p class="media__note">Photography placeholder<br>Client photography to supply</p>
-      </div>
-    </div>
-  )}
+  <div class="plate__media">
+    <img src={imageSrc} width="1200" height="800" alt={imageAlt} loading="lazy" decoding="async" title="Illustrative, not real photos of GrandBelle">
+    <span class="media-ribbon" aria-hidden="true">Illustrative</span>
+    <span class="visually-hidden">Illustrative, not real photos of GrandBelle</span>
+  </div>
   <div class="plate__text">
     <h3 class="h4">{title}</h3>
     <p class="card__body">{body}</p>

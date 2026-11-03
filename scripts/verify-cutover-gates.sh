@@ -66,4 +66,84 @@ for p in $PAGES; do
 done
 if [ "$n" = 0 ]; then pass G9-photos; else warn "G9-photos $n placeholder labels (decision D5)"; fi
 
+# G9b the full illustrative phrase must stay in the HTML (owner decision D5).
+# These two pages carry the illustrative images; the visible ribbon says
+# "Illustrative" only, so the full sentence has to remain in the markup.
+for p in / /shipping-a-car/; do
+  if curl -sL -m 30 "$BASE$p" | grep -q 'Illustrative, not real photos of GrandBelle'; then
+    pass "G9b-illustrative-phrase $p"
+  else
+    fail "G9b-illustrative-phrase missing on $p"
+  fi
+done
+
+# G10 old WordPress addresses the owner approved on 2026-11-03 must 301 to the new
+# routes (brief 2026-11-03-site-redirects-brief.md). Every address is listed in
+# public/_redirects twice: with the trailing slash and bare. Pages matches a rule on
+# the literal request path and does not normalise it into the rule first (measured on
+# the branch preview 2026-11-03: /about-us 404s, /about-us/ 301s, while the /about
+# asset itself still 308s to /about/), so both forms have to be covered here.
+g10_check(){
+  local p="$1" want="$2" hdr status where
+  hdr=$(curl -sI -m 30 "$BASE$p")
+  status=$(printf '%s\n' "$hdr" | awk 'NR==1{print $2}')
+  where=$(printf '%s\n' "$hdr" | awk 'tolower($1)=="location:"{print $2; exit}' | tr -d '\r')
+  if [ "$status" = 301 ] && [ "$where" = "$want" ]; then
+    printf ''
+  else
+    printf ' (%s -> %s/%s, wanted 301 %s)' "$p" "$status" "$where" "$want"
+  fi
+}
+while read -r slash bare want; do
+  bad="$(g10_check "$slash" "$want")$(g10_check "$bare" "$want")"
+  if [ -z "$bad" ]; then
+    pass "G10-redirect $slash (+ bare $bare) -> $want"
+  else
+    fail "G10-redirect $slash:$bad"
+  fi
+done <<'G10LIST'
+/contact-us/ /contact-us /about/
+/contact-us-2/ /contact-us-2 /about/
+/track-form/ /track-form /track/
+/track-shipment/ /track-shipment /track/
+/track-your-package/ /track-your-package /track/
+/blogs/ /blogs /
+/shop-ship-with-grandbelle/ /shop-ship-with-grandbelle /shop-and-ship/
+G10LIST
+
+# G10b the retired staff dashboard must stay 404: no redirect may be added for it.
+g10b=""
+for p in /gb-dashboard/ /receiving/ /print-label/; do
+  code=$(curl -s -m 30 -o /dev/null -w '%{http_code}' "$BASE$p")
+  [ "$code" = 404 ] || g10b="$g10b $p=$code"
+done
+if [ -z "$g10b" ]; then pass G10b-staff-dashboard-404; else fail "G10b-staff-dashboard-not-404 on:$g10b"; fi
+
+# G11 /shop-and-ship/ replaces the live WordPress /shop-ship-with-grandbelle/:
+# a real page with the two offers, the Valley Stream address and both WhatsApp
+# lines, and none of the things the old page carried that must not survive —
+# an enquiry form, the dead +1 (516) 256-5666 line, or the "anywhere in the
+# world" claim (the corridor is the United States to Nigeria and West Africa).
+SHOP_PATH=/shop-and-ship/
+shop_code=$(curl -s -m 30 -o "$T/gate-shop.html" -w '%{http_code}' "$BASE$SHOP_PATH")
+if [ "$shop_code" = 200 ]; then pass G11-shop-and-ship-200; else fail "G11-shop-and-ship status=$shop_code"; fi
+if grep -q 'Hook Creek' "$T/gate-shop.html"; then pass G11-shop-address; else fail G11-shop-address-missing; fi
+for w in wa.me/13477128862 wa.me/15165542016; do
+  if grep -q "$w" "$T/gate-shop.html"; then pass "G11-shop-whatsapp $w"; else fail "G11-shop-whatsapp missing $w"; fi
+done
+if grep -q '<form' "$T/gate-shop.html"; then fail G11-shop-has-form; else pass G11-shop-no-form; fi
+if grep -q '256-5666' "$T/gate-shop.html"; then fail G11-shop-dead-number; else pass G11-shop-no-dead-number; fi
+if grep -qi 'anywhere in the world' "$T/gate-shop.html"; then fail G11-shop-anywhere-claim; else pass G11-shop-no-anywhere-claim; fi
+# The sitemap integration writes sitemap-index.xml pointing at sitemap-0.xml.
+# The <loc> there is absolute (the canonical site URL), so take the file name
+# only and re-fetch it from the base URL under test.
+smname=$(curl -s -m 30 "$BASE/sitemap-index.xml" | grep -o '<loc>[^<]*</loc>' | head -1 | sed 's/<[^>]*>//g' | sed 's#.*/##')
+[ -n "$smname" ] || smname=sitemap-0.xml
+smchild="$BASE/$smname"
+if curl -s -m 30 "$smchild" | grep -q "<loc>[^<]*$SHOP_PATH</loc>"; then
+  pass G11-shop-in-sitemap
+else
+  fail "G11-shop-not-in-sitemap ($smchild)"
+fi
+
 exit $failed

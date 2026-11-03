@@ -1,4 +1,7 @@
 ---
+import { CONTACT_LINES, PHONE_LINES_LIVE } from '../../data/contact.js';
+import ContactLine from '../ContactLine.astro';
+
 interface Props {
   eyebrow: string;
   heading: string;
@@ -45,8 +48,10 @@ const { eyebrow, heading, lead, facts, showQuotePrompt = false } = Astro.props;
         </div>
       )}
       <div class="stack stack--tight">
-        <p class="label">Prefer to talk</p>
-        <p class="body-sm"><a href="tel:+15162565666">Support +1 (516) 256-5666</a></p>
+        <p class="label">{PHONE_LINES_LIVE ? 'Prefer to talk' : 'Message the office'}</p>
+        {CONTACT_LINES.map(line => (
+          <p class="body-sm"><a href={line.href}><ContactLine line={line} /></a></p>
+        ))}
       </div>
     </div>
   </div>

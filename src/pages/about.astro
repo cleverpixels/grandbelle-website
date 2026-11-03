@@ -4,6 +4,8 @@ import Footer from '../components/layout/Footer.astro';
 import AnswerBand from '../components/bands/AnswerBand.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
 import { cardFigure, RATE_CARD_NOTICE, TRANSIT, TRANSIT_SHORT } from '../data/rate-card.js';
+import { CONTACT_LINES, EMAIL, PHONE_LINES_LIVE } from '../data/contact.js';
+import ContactLine from '../components/ContactLine.astro';
 import '../styles/global.css';
 
 const laneCards = [
@@ -33,7 +35,7 @@ const laneCards = [
       heading="Two offices, one corridor, and the same two sets of names on the paperwork."
       lead="Grandbelle International Inc moves cargo from the United States to Nigeria and West Africa, door to door, with one office at each end."
       facts={[
-        { label: 'How much', figure: 'Four fields', description: 'Destination, quantity, weight, and value return an estimate.' },
+        { label: 'How much', figure: 'Instant estimate', description: 'Choose the service and the destination, give the weight, and see an estimate straight away. No account needed.' },
         { label: 'How long', figure: TRANSIT_SHORT.air, description: 'Business days by air, door to door. Indicative.' },
       ]}
     />
@@ -48,7 +50,7 @@ const laneCards = [
             </div>
             <div class="stack">
               <h2 class="h2">What that means in practice</h2>
-              <p class="muted">It means the answer to "where is it now" is a status rather than a person's recollection. It means the answer to "how much" arrives before a payment and before an account. It means the answer to "how long" is printed on the page rather than promised on a call. None of that is a technology problem. It is a question of what a visitor meets first.</p>
+              <p class="muted">It means the answer to "where is it now" is a status rather than a person's recollection. It means the answer to "how much" arrives before a payment and before an account. It means the answer to "how long" is printed on the page rather than promised on a call. None of that is a technology problem. It is a question of what the page answers before anyone has to ask.</p>
             </div>
           </div>
           <div class="stack">
@@ -64,7 +66,7 @@ const laneCards = [
       <div class="wrap band__inner">
         <div class="stack stack--tight">
           <h2 class="h2">Two offices, six services</h2>
-          <p class="muted measure">One office at each end of the route, so a consignment is handed over twice by the same company. Six services, air freight through to the final delivery, run as one chain rather than six vendors. Both counts are visible on this site: the six services on the homepage, and the two addresses further down this page.</p>
+          <p class="muted measure">One office at each end of the route, so a consignment is handed over twice by the same company. Six services, air freight through to the final delivery, run as one chain rather than six vendors.</p>
         </div>
       </div>
     </section>
@@ -97,13 +99,15 @@ const laneCards = [
           </div>
           <div class="card">
             <h3 class="h4">Ikeja, Lagos</h3>
-            <p class="card__body">123 Toyin Street, Ikeja, Lagos, Nigeria.<br><a href="tel:+2348035137916">+234 803 513 7916</a></p>
+            <p class="card__body">123 Toyin Street, Ikeja, Lagos, Nigeria.<br><a href="tel:+2348035137916"><span class="phone-num">+234 803 513 7916</span></a></p>
             <p class="card__meta">Import clearance, final leg, collection</p>
           </div>
           <div class="card">
             <h3 class="h4">Contact</h3>
-            <p class="card__body"><a href="tel:+15162565666">+1 (516) 256-5666</a><br><a href="https://wa.me/13477128862">WhatsApp +1 (347) 712-8862</a><br><a href="mailto:info@grandbelleinternational.com">info@grandbelleinternational.com</a></p>
-            <p class="card__meta">Support, WhatsApp, and email</p>
+            <p class="card__body">{CONTACT_LINES.map(line => (
+              <Fragment><a href={line.href}><ContactLine line={line} /></a><br /></Fragment>
+            ))}<a href={EMAIL.href}>{EMAIL.display}</a></p>
+            <p class="card__meta">{PHONE_LINES_LIVE ? 'Support, WhatsApp, and email' : 'WhatsApp and email'}</p>
           </div>
         </div>
         <div class="btn-row" style="margin-top: 32px;">
