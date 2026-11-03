@@ -66,4 +66,15 @@ for p in $PAGES; do
 done
 if [ "$n" = 0 ]; then pass G9-photos; else warn "G9-photos $n placeholder labels (decision D5)"; fi
 
+# G9b the full illustrative phrase must stay in the HTML (owner decision D5).
+# These two pages carry the illustrative images; the visible ribbon says
+# "Illustrative" only, so the full sentence has to remain in the markup.
+for p in / /shipping-a-car/; do
+  if curl -sL -m 30 "$BASE$p" | grep -q 'Illustrative, not real photos of GrandBelle'; then
+    pass "G9b-illustrative-phrase $p"
+  else
+    fail "G9b-illustrative-phrase missing on $p"
+  fi
+done
+
 exit $failed

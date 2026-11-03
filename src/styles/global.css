@@ -192,6 +192,19 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
   box-shadow: none;
 }
 
+/* Visually hidden but read by screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: var(--brand-border-thin);
+  height: var(--brand-border-thin);
+  margin: calc(var(--brand-space-1) * -1);
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;
@@ -500,7 +513,7 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
   box-shadow: var(--brand-shadow-sm);
   overflow: hidden;
 }
-.plate__media { position: relative; aspect-ratio: 3/2; background: var(--brand-surface); }
+.plate__media { position: relative; aspect-ratio: 3/2; background: var(--brand-surface); overflow: hidden; }
 .plate__media img { width: 100%; height: 100%; object-fit: cover; }
 .plate__text { padding: var(--brand-space-6); display: grid; gap: var(--brand-space-3); }
 
@@ -525,31 +538,33 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
   background: var(--brand-surface);
 }
 .media--photo img { width: 100%; height: 100%; object-fit: cover; }
-.media__label {
+
+/* Illustrative corner ribbon.
+   A 45-degree sash across the top-left corner, cut by the media edge
+   (overflow hidden on .plate__media and .media--photo). The centre sits on
+   the corner bisector, so the strip crosses the corner and runs off the top
+   and left edges. The seven crops hold their subject in the central half,
+   so the corner stays clear; the top-left is also the first thing the eye
+   meets, which keeps the label noticeable without a caption bar. */
+.media-ribbon {
   position: absolute;
-  inset-inline-start: var(--brand-space-3);
-  inset-block-end: var(--brand-space-3);
-  max-width: calc(100% - (var(--brand-space-3) * 2));
-  margin: 0;
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--brand-radius-xs);
-  background: rgba(3, 27, 58, 0.78);
+  top: 1.125rem;
+  left: 1.125rem;
+  z-index: 1;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  padding: 0.3rem 1.1rem;
+  background: rgba(3, 27, 58, 0.72);
   color: var(--brand-neutral-0);
-  font-size: var(--brand-text-caption-size);
-  font-weight: var(--brand-text-caption-weight);
-  line-height: var(--brand-text-caption-leading);
-  letter-spacing: var(--brand-text-caption-tracking);
+  font-family: var(--brand-font-body);
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
 }
-.media__note {
-  font-size: var(--brand-text-caption-size);
-  font-weight: var(--brand-text-caption-weight);
-  line-height: var(--brand-text-caption-leading);
-  letter-spacing: var(--brand-text-caption-tracking);
-  text-transform: uppercase;
-  color: var(--brand-muted);
-}
-.band--dark .media, .band--dark .media__note { color: var(--brand-neutral-0); }
+.band--dark .media { color: var(--brand-neutral-0); }
 
 /* Link colours on surfaces */
 .band--surface a:not(.btn), .band--tint a:not(.btn) { color: var(--brand-primary); }
