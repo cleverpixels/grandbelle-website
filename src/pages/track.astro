@@ -1,0 +1,38 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import '../styles/global.css';
+const whatsappUrl = 'https://wa.me/13477128862';
+const emailUrl = 'mailto:info@grandbelleinternational.com';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Track your shipment | Grandbelle International Inc</title>
+  <meta name="description" content="Online shipment tracking is not available yet. Contact Grandbelle by WhatsApp or email and we will confirm the status of your consignment.">
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <script is:inline src="https://embed.tawk.to/6aa967c3d1963a3449b3b83e/default" async></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <Header currentPage="/track/" />
+  <main id="main">
+    <section class="band">
+      <div class="wrap band__inner stack">
+        <p class="eyebrow">Shipment tracking</p>
+        <h1 class="h1">Shipment tracking is not available online yet.</h1>
+        <p class="lead">We are still building online tracking. Until it is ready, contact us and we will confirm the status of your consignment for you.</p>
+        <p class="body-sm">Please have your consignment number ready, or the receipt we sent when your consignment was received.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href={whatsappUrl}>WhatsApp +1 (347) 712-8862</a>
+          <a class="btn btn--secondary" href={emailUrl}>Email info@grandbelleinternational.com</a>
+        </div>
+        <p class="body-sm muted">Or call Support +1 (516) 256-5666.</p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</body>
+</html>
