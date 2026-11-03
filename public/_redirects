@@ -7,5 +7,25 @@
 /our-services/     /#services       301
 /services/         /#services       301
 /home/             /                301
-/login/           /                301
-/my-account/      /                301
+/login/            /                301
+/my-account/       /                301
+
+# Owner-approved 2026-11-03 (brief 2026-11-03-site-redirects-brief.md).
+# Cloudflare Pages matches a redirect rule on the literal request path; it does not
+# normalise the path into the rule first (measured on the branch preview 2026-11-03:
+# /about-us 404s while /about-us/ 301s, even though the /about asset still 308s to
+# /about/). So each old address is listed in both forms.
+/contact-us/                /about/    301
+/contact-us                 /about/    301
+/contact-us-2/              /about/    301
+/contact-us-2               /about/    301
+/track-form/                /track/    301
+/track-form                 /track/    301
+/track-shipment/            /track/    301
+/track-shipment             /track/    301
+/track-your-package/        /track/    301
+/track-your-package         /track/    301
+/blogs/                     /          301
+/blogs                      /          301
+/shop-ship-with-grandbelle/ /          301
+/shop-ship-with-grandbelle  /          301

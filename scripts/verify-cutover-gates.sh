@@ -77,4 +77,46 @@ for p in / /shipping-a-car/; do
   fi
 done
 
+# G10 old WordPress addresses the owner approved on 2026-11-03 must 301 to the new
+# routes (brief 2026-11-03-site-redirects-brief.md). Every address is listed in
+# public/_redirects twice: with the trailing slash and bare. Pages matches a rule on
+# the literal request path and does not normalise it into the rule first (measured on
+# the branch preview 2026-11-03: /about-us 404s, /about-us/ 301s, while the /about
+# asset itself still 308s to /about/), so both forms have to be covered here.
+g10_check(){
+  local p="$1" want="$2" hdr status where
+  hdr=$(curl -sI -m 30 "$BASE$p")
+  status=$(printf '%s\n' "$hdr" | awk 'NR==1{print $2}')
+  where=$(printf '%s\n' "$hdr" | awk 'tolower($1)=="location:"{print $2; exit}' | tr -d '\r')
+  if [ "$status" = 301 ] && [ "$where" = "$want" ]; then
+    printf ''
+  else
+    printf ' (%s -> %s/%s, wanted 301 %s)' "$p" "$status" "$where" "$want"
+  fi
+}
+while read -r slash bare want; do
+  bad="$(g10_check "$slash" "$want")$(g10_check "$bare" "$want")"
+  if [ -z "$bad" ]; then
+    pass "G10-redirect $slash (+ bare $bare) -> $want"
+  else
+    fail "G10-redirect $slash:$bad"
+  fi
+done <<'G10LIST'
+/contact-us/ /contact-us /about/
+/contact-us-2/ /contact-us-2 /about/
+/track-form/ /track-form /track/
+/track-shipment/ /track-shipment /track/
+/track-your-package/ /track-your-package /track/
+/blogs/ /blogs /
+/shop-ship-with-grandbelle/ /shop-ship-with-grandbelle /
+G10LIST
+
+# G10b the retired staff dashboard must stay 404: no redirect may be added for it.
+g10b=""
+for p in /gb-dashboard/ /receiving/ /print-label/; do
+  code=$(curl -s -m 30 -o /dev/null -w '%{http_code}' "$BASE$p")
+  [ "$code" = 404 ] || g10b="$g10b $p=$code"
+done
+if [ -z "$g10b" ]; then pass G10b-staff-dashboard-404; else fail "G10b-staff-dashboard-not-404 on:$g10b"; fi
+
 exit $failed
