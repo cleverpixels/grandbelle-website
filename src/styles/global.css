@@ -545,11 +545,22 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
    the corner bisector, so the strip crosses the corner and runs off the top
    and left edges. The seven crops hold their subject in the central half,
    so the corner stays clear; the top-left is also the first thing the eye
-   meets, which keeps the label noticeable without a caption bar. */
+   meets, which keeps the label noticeable without a caption bar.
+
+   Geometry, because the first version shipped a clipped word: the media box
+   cuts the rotated strip at its own edges, so the strip is only visible for
+   2 * sqrt(2) * offset along its own axis, centred on the offset point. At
+   the old 1.125rem (18px) offset that visible run was 51px while the word
+   itself measures ~88px, so both ends of "ILLUSTRATIVE" fell outside the box
+   and the label read "USTRAT". At 4.5em (= 45px at the 0.625rem font size
+   below) the visible run is 127px, which leaves 19.5px spare along the strip
+   and ~9.7px of clear space at each end of the word inside the media box.
+   Keep the offset in em so it tracks the type size, and keep it above
+   (word width + line height) * 0.354 + margin, or the ends will clip again. */
 .media-ribbon {
   position: absolute;
-  top: 1.125rem;
-  left: 1.125rem;
+  top: 4.5em;
+  left: 4.5em;
   z-index: 1;
   transform: translate(-50%, -50%) rotate(-45deg);
   padding: 0.3rem 1.1rem;
