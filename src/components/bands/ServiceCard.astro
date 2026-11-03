@@ -13,7 +13,8 @@ const { title, body, badge, badgeVariant = 'info', imageSrc, imageAlt } = Astro.
 <article class="plate">
   {imageSrc ? (
     <div class="plate__media">
-      <img src={imageSrc} width="1200" height="800" alt={imageAlt || ''}>
+      <img src={imageSrc} width="1200" height="800" alt={imageAlt || ''} loading="lazy" decoding="async">
+      <p class="media__label">Illustrative, not real photos of GrandBelle</p>
     </div>
   ) : (
     <div class="plate__media">
