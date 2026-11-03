@@ -4,6 +4,7 @@ import Footer from '../components/layout/Footer.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
 import { cardFigure, RATE_CARD_NOTICE, TRANSIT, TRANSIT_SHORT } from '../data/rate-card.js';
 import QuoteEstimator from '../components/QuoteEstimator.jsx';
+import ContactLine from '../components/ContactLine.astro';
 import {
   PHONE_LINES_LIVE,
   SUPPORT_PHONE,
@@ -59,7 +60,7 @@ const laneCards = [
           <div class="stack stack--tight">
             <h2 class="h4">Send the details on WhatsApp</h2>
             <p class="body-sm muted">The figure above is an estimate, not a booking. Send the same details to the office on WhatsApp and they will confirm the figure and the departure.</p>
-            <a class="btn btn--primary" href={WHATSAPP_PRIMARY.href} data-quote-request>{WHATSAPP_PRIMARY.label}</a>
+            <a class="btn btn--primary" href={WHATSAPP_PRIMARY.href} data-quote-request><ContactLine line={WHATSAPP_PRIMARY} /></a>
           </div>
         </div>
       </div>
@@ -112,9 +113,9 @@ const laneCards = [
         <div class="stack stack--tight">
           <p class="label">{PHONE_LINES_LIVE ? 'Prefer to speak to someone' : 'Prefer to message someone'}</p>
           {PHONE_LINES_LIVE ? (
-            <p class="body-sm">The telephone and WhatsApp entries sit second to the estimate, not in place of it. <a href={SUPPORT_PHONE.href}>{SUPPORT_PHONE.display}</a>.</p>
+            <p class="body-sm">The telephone and WhatsApp entries sit second to the estimate, not in place of it. <a href={SUPPORT_PHONE.href}><span class="phone-num">{SUPPORT_PHONE.display}</span></a>.</p>
           ) : (
-            <p class="body-sm">The estimate above is a figure, not a booking. Send it to the office on WhatsApp and they will confirm it: primary {WHATSAPP_PRIMARY.display}, secondary <a href={WHATSAPP_SECONDARY.href}>{WHATSAPP_SECONDARY.display}</a>.</p>
+            <p class="body-sm">The estimate above is a figure, not a booking. Send it to the office on WhatsApp and they will confirm it: primary <span class="phone-num">{WHATSAPP_PRIMARY.display}</span>, secondary <a href={WHATSAPP_SECONDARY.href}><span class="phone-num">{WHATSAPP_SECONDARY.display}</span></a>.</p>
           )}
         </div>
       </div>

@@ -7,6 +7,7 @@ import {
   WHATSAPP_SECONDARY,
   lineLabel,
 } from '../../data/contact.js';
+import ContactLine from '../ContactLine.astro';
 
 interface Props {
   currentPage?: string;
@@ -62,7 +63,7 @@ const navLinks = [
             </li>
           ))}
           {CONTACT_LINES.map(line => (
-            <li><a class="nav__link" href={line.href}>{lineLabel(line)}</a></li>
+            <li><a class="nav__link" href={line.href}><ContactLine line={line} /></a></li>
           ))}
         </ul>
       </nav>

@@ -4,7 +4,8 @@ import Footer from '../components/layout/Footer.astro';
 import AnswerBand from '../components/bands/AnswerBand.astro';
 import LaneCards from '../components/bands/LaneCards.astro';
 import { cardFigure, RATE_CARD_NOTICE, TRANSIT, TRANSIT_SHORT } from '../data/rate-card.js';
-import { CONTACT_LINES, EMAIL, PHONE_LINES_LIVE, lineLabel } from '../data/contact.js';
+import { CONTACT_LINES, EMAIL, PHONE_LINES_LIVE } from '../data/contact.js';
+import ContactLine from '../components/ContactLine.astro';
 import '../styles/global.css';
 
 const laneCards = [
@@ -98,13 +99,13 @@ const laneCards = [
           </div>
           <div class="card">
             <h3 class="h4">Ikeja, Lagos</h3>
-            <p class="card__body">123 Toyin Street, Ikeja, Lagos, Nigeria.<br><a href="tel:+2348035137916">+234 803 513 7916</a></p>
+            <p class="card__body">123 Toyin Street, Ikeja, Lagos, Nigeria.<br><a href="tel:+2348035137916"><span class="phone-num">+234 803 513 7916</span></a></p>
             <p class="card__meta">Import clearance, final leg, collection</p>
           </div>
           <div class="card">
             <h3 class="h4">Contact</h3>
             <p class="card__body">{CONTACT_LINES.map(line => (
-              <Fragment><a href={line.href}>{line.role ? lineLabel(line) : line.display}</a><br /></Fragment>
+              <Fragment><a href={line.href}><ContactLine line={line} /></a><br /></Fragment>
             ))}<a href={EMAIL.href}>{EMAIL.display}</a></p>
             <p class="card__meta">{PHONE_LINES_LIVE ? 'Support, WhatsApp, and email' : 'WhatsApp and email'}</p>
           </div>

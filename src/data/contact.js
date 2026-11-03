@@ -80,6 +80,24 @@ export function lineLabel(line) {
   return line.role ? `${line.label} (${line.role})` : line.label;
 }
 
+/**
+ * The same label split into the parts a narrow column must break BETWEEN.
+ *
+ * "WhatsApp +1 (516) 554-2016 (secondary)" broke inside the number at 390 px
+ * because a browser treats the hyphen in "554-2016" as a line-break
+ * opportunity, leaving "554-" on one line. `number` is therefore rendered
+ * inside <span class="phone-num"> (white-space: nowrap, see global.css) and
+ * only `lead` and `role` are allowed to wrap onto their own lines. Derive the
+ * lead from `label` rather than hard-coding it so the Support line, which
+ * comes back when PHONE_LINES_LIVE is true, carries "Support" with no edit.
+ */
+export function lineParts(line) {
+  const lead = line.label.endsWith(line.display)
+    ? line.label.slice(0, line.label.length - line.display.length).trim()
+    : line.label;
+  return { lead, number: line.display, role: line.role };
+}
+
 /** The single line the desktop header bar has room for. */
 export const HEADER_LINE = PHONE_LINES_LIVE ? SUPPORT_PHONE : WHATSAPP_PRIMARY;
 

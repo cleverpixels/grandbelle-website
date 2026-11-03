@@ -1,6 +1,7 @@
 ---
 import { RATE_CARD_FOOTER } from '../../data/rate-card.js';
-import { CONTACT_LINES, EMAIL, lineLabel } from '../../data/contact.js';
+import { CONTACT_LINES, EMAIL } from '../../data/contact.js';
+import ContactLine from '../ContactLine.astro';
 ---
 
 <div class="footer-markstrip">
@@ -34,9 +35,9 @@ import { CONTACT_LINES, EMAIL, lineLabel } from '../../data/contact.js';
         <h2 class="h4">Contact</h2>
         <ul class="footer__list body-sm">
           {CONTACT_LINES.map(line => (
-            <li><a href={line.href}>{lineLabel(line)}</a></li>
+            <li><a href={line.href}><ContactLine line={line} /></a></li>
           ))}
-          <li><a href="tel:+2348035137916">Lagos +234 803 513 7916</a></li>
+          <li><a href="tel:+2348035137916">Lagos <span class="phone-num">+234 803 513 7916</span></a></li>
           <li><a href={EMAIL.href}>{EMAIL.display}</a></li>
         </ul>
       </div>

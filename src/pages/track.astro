@@ -1,6 +1,7 @@
 ---
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import ContactLine from '../components/ContactLine.astro';
 import '../styles/global.css';
 import {
   EMAIL,
@@ -31,13 +32,13 @@ import {
         <p class="lead">Until online tracking is available, contact us and we will confirm the status of your consignment for you.</p>
         <p class="body-sm">Please have your consignment number ready, or the receipt we sent when your consignment was received.</p>
         <div class="btn-row">
-          <a class="btn btn--primary" href={WHATSAPP_PRIMARY.href}>{WHATSAPP_PRIMARY.label}</a>
+          <a class="btn btn--primary" href={WHATSAPP_PRIMARY.href}><ContactLine line={WHATSAPP_PRIMARY} /></a>
           <a class="btn btn--secondary" href={EMAIL.href}>Email {EMAIL.display}</a>
         </div>
         {PHONE_LINES_LIVE ? (
-          <p class="body-sm muted">Or call Support {SUPPORT_PHONE.display}.</p>
+          <p class="body-sm muted">Or call Support <span class="phone-num">{SUPPORT_PHONE.display}</span>.</p>
         ) : (
-          <p class="body-sm muted">Also on WhatsApp: <a href={WHATSAPP_SECONDARY.href}>{WHATSAPP_SECONDARY.display}</a> (secondary).</p>
+          <p class="body-sm muted">Also on WhatsApp: <a href={WHATSAPP_SECONDARY.href}><span class="phone-num">{WHATSAPP_SECONDARY.display}</span></a> (secondary).</p>
         )}
       </div>
     </section>

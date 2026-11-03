@@ -1,7 +1,8 @@
 ---
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import { lineLabel, WHATSAPP_LINES } from '../data/contact.js';
+import { WHATSAPP_LINES } from '../data/contact.js';
+import ContactLine from '../components/ContactLine.astro';
 import '../styles/global.css';
 ---
 
@@ -91,7 +92,7 @@ import '../styles/global.css';
         </div>
         <div class="btn-row">
           {WHATSAPP_LINES.map((line, i) => (
-            <a class={i === 0 ? 'btn btn--primary' : 'btn btn--secondary'} href={line.href}>{lineLabel(line)}</a>
+            <a class={i === 0 ? 'btn btn--primary' : 'btn btn--secondary'} href={line.href}><ContactLine line={line} /></a>
           ))}
         </div>
       </div>
