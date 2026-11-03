@@ -29,12 +29,13 @@ if [ "$code" = 200 ] && grep -q '^User-agent:' "$T/gate-robots.txt"; then pass G
 code=$(curl -s -m 30 -o /dev/null -w '%{http_code}' "$BASE/no-such-page-xyz")
 if [ "$code" = 404 ]; then pass G2-404; else fail "G2-404 status=$code"; fi
 
-# G3 /track is its own page and links to the Dockets lookup
+# G3 /track is its own page and must NOT send customers to the staff-only Dockets
+# lookup (staff-only since 2026-11-01; customers hit a login there).
 home=$(curl -sL -m 30 "$BASE/" | md5sum)
 track=$(curl -sL -m 30 "$BASE/track" | md5sum)
 if [ "$home" != "$track" ]; then pass G3-track-not-homepage; else fail G3-track-equals-homepage; fi
-if curl -sL -m 30 "$BASE/track" | grep -q 'dockets.grandbelleinternational.com/shipment-tracker/lookup'; then
-  pass G3-track-links-dockets; else fail G3-track-no-dockets-link; fi
+if curl -sL -m 30 "$BASE/track" | grep -q 'dockets.grandbelleinternational.com'; then
+  fail G3-track-links-dockets; else pass G3-track-no-dockets-link; fi
 
 # G4 security headers
 hd=$(curl -sI -m 30 "$BASE/")
