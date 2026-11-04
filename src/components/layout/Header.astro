@@ -14,12 +14,29 @@ interface Props {
 }
 const { currentPage = '' } = Astro.props;
 
+/**
+ * The owner-approved primary navigation, 2026-11-03, in this order.
+ *
+ * "Services" points at the services section of the home page (#services): there
+ * is no /services/ page, only a redirect, so that href keeps the link on the
+ * real page and it never matches `currentPage` — no aria-current, deliberately.
+ *
+ * "Home" is gone (the logo goes home) and the duplicate "Get a quote" text link
+ * is gone (the button in the bar is the single call to action). Labels are
+ * owner copy: do not re-word.
+ */
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/services/', label: 'Services' },
+  { href: '/#services', label: 'Services' },
+  { href: '/shop-and-ship/', label: 'Shop & ship' },
+  { href: '/shipping-a-car/', label: 'Ship a car' },
+  { href: '/track/', label: 'Track a shipment' },
   { href: '/about/', label: 'About' },
-  { href: '/get-a-quote/', label: 'Get a quote' },
 ];
+
+const QUOTE_HREF = '/get-a-quote/';
+
+/** aria-current="page" only on the page you are actually on. */
+const ariaCurrent = (href: string) => (href === currentPage ? 'page' : undefined);
 ---
 
 <header class="site-header">
@@ -35,7 +52,7 @@ const navLinks = [
             <a
               class="nav__link"
               href={link.href}
-              aria-current={currentPage === link.href ? 'page' : undefined}
+              aria-current={ariaCurrent(link.href)}
             >
               {link.label}
             </a>
@@ -52,16 +69,17 @@ const navLinks = [
         <a href={WHATSAPP_SECONDARY.href}>{lineLabel(WHATSAPP_SECONDARY)}</a>
       </span>
     )}
-    <a class="btn btn--primary header__action" href="/get-a-quote/">Get a quote</a>
+    <a class="btn btn--primary header__action" href={QUOTE_HREF}>Get a quote</a>
     <details class="drawer">
       <summary>Menu</summary>
       <nav class="drawer__panel" aria-label="Primary, mobile">
         <ul class="drawer__list">
           {navLinks.map(link => (
             <li>
-              <a class="nav__link" href={link.href}>{link.label}</a>
+              <a class="nav__link" href={link.href} aria-current={ariaCurrent(link.href)}>{link.label}</a>
             </li>
           ))}
+          <li><a class="nav__link" href={QUOTE_HREF} aria-current={ariaCurrent(QUOTE_HREF)}>Get a quote</a></li>
           {CONTACT_LINES.map(line => (
             <li><a class="nav__link" href={line.href}><ContactLine line={line} /></a></li>
           ))}

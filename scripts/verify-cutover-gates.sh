@@ -146,4 +146,66 @@ else
   fail "G11-shop-not-in-sitemap ($smchild)"
 fi
 
+# G12 primary navigation (owner decision 2026-11-03, card t_3f26d3a5): the
+# header on / carries exactly five links in this order — Services, Shop & ship,
+# Ship a car, Track a shipment, About — with no "Home" text link (the logo goes
+# home) and exactly one "Get a quote" button. Positions are byte offsets inside
+# the <header> element so a reordering cannot hide behind the rest of the page.
+curl -sL -m 30 "$BASE/" -o "$T/gate-home.html"
+hdr=$(tr '\n' ' ' < "$T/gate-home.html" | grep -o '<header class="site-header".*</header>' | head -1)
+if [ -z "$hdr" ]; then
+  fail G12-header-missing
+else
+  g12ok=1
+  last=-1
+  for h in '/#services' '/shop-and-ship/' '/shipping-a-car/' '/track/' '/about/'; do
+    pos=$(printf '%s' "$hdr" | grep -bo "href=\"$h\"" | head -1 | cut -d: -f1)
+    if [ -z "$pos" ]; then
+      fail "G12-nav-missing $h"; g12ok=0; break
+    elif [ "$pos" -le "$last" ]; then
+      fail "G12-nav-out-of-order $h"; g12ok=0; break
+    fi
+    last=$pos
+  done
+  [ "$g12ok" = 1 ] && pass G12-nav-five-in-order
+  if printf '%s' "$hdr" | grep -q '>Home<'; then
+    fail G12-nav-home-link
+  else
+    pass G12-nav-no-home-link
+  fi
+  n=$(printf '%s' "$hdr" | grep -o 'class="btn btn--primary header__action"' | wc -l | tr -d ' ')
+  if [ "$n" = 1 ]; then pass G12-one-quote-button; else fail "G12-quote-buttons $n (want 1)"; fi
+fi
+
+# G13 /what-can-i-ship/ states what may and may not be shipped, sourced only from
+# the documented rules (Tawk KB article 13 and the sourcing guide): the five
+# categories we handle, both official list URLs, and neither an enquiry form nor
+# the dead +1 (516) 256-5666 line. /shop-and-ship/ must link to it.
+RULES_PATH=/what-can-i-ship/
+rules_code=$(curl -s -m 30 -o "$T/gate-rules.html" -w '%{http_code}' "$BASE$RULES_PATH")
+if [ "$rules_code" = 200 ]; then pass G13-what-can-i-ship-200; else fail "G13-what-can-i-ship status=$rules_code"; fi
+for u in https://customs.gov.ng/rules-guidelines/import-list https://fccpc.gov.ng/resources-library/publications/import-prohibition-list/; do
+  if grep -qF "$u" "$T/gate-rules.html"; then pass "G13-official-list $u"; else fail "G13-official-list missing $u"; fi
+done
+for w in \
+  'General cargo and packages' \
+  'Bulk cargo and large consignments' \
+  'Vehicles, through our auto shipping service' \
+  'Consolidated household and personal effects' \
+  'Commercial shipments'; do
+  if grep -qF "$w" "$T/gate-rules.html"; then pass "G13-handles $w"; else fail "G13-handles missing $w"; fi
+done
+if grep -q '<form' "$T/gate-rules.html"; then fail G13-has-form; else pass G13-no-form; fi
+if grep -q '256-5666' "$T/gate-rules.html"; then fail G13-dead-number; else pass G13-no-dead-number; fi
+if grep -qF 'href="/what-can-i-ship/"' "$T/gate-shop.html"; then
+  pass G13-linked-from-shop-and-ship
+else
+  fail G13-not-linked-from-shop-and-ship
+fi
+if curl -s -m 30 "$smchild" | grep -q "<loc>[^<]*$RULES_PATH</loc>"; then
+  pass G13-what-can-i-ship-in-sitemap
+else
+  fail "G13-what-can-i-ship-not-in-sitemap ($smchild)"
+fi
+
 exit $failed

@@ -1,0 +1,156 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { WHATSAPP_LINES } from '../data/contact.js';
+import ContactLine from '../components/ContactLine.astro';
+import '../styles/global.css';
+
+const handled = [
+  'General cargo and packages',
+  'Bulk cargo and large consignments',
+  'Vehicles, through our auto shipping service',
+  'Consolidated household and personal effects',
+  'Commercial shipments',
+];
+
+const prohibited = [
+  'Footwear, bags and suitcases, with exceptions for safety, sports and canvas shoes',
+  'Furniture, with a list of exclusions',
+  'Used compressors, used air conditioners and used fridges or freezers',
+  'Used pneumatic tyres, other than large used truck tyres intended for retreading',
+  'Corrugated paper and board, and cartons and boxes made from them, plus toilet and facial tissue',
+  'Soaps and detergents in retail packs',
+  'Spaghetti and noodles',
+  'Fruit juice in retail packs',
+  'Carpets and other textile floor coverings',
+  'Certain medicines, including common paracetamol, multivitamin and antimalarial formulations',
+];
+
+const officialLists = [
+  { label: 'Nigeria Customs Service import list', href: 'https://customs.gov.ng/rules-guidelines/import-list' },
+  { label: 'Import prohibition list, FCCPC', href: 'https://fccpc.gov.ng/resources-library/publications/import-prohibition-list/' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What can I ship? | Grandbelle International Inc</title>
+  <meta name="description" content="What Grandbelle handles, what to ask us about before you book, and the goods Nigeria does not allow in.">
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <script is:inline src="https://embed.tawk.to/6aa967c3d1963a3449b3b83e/default" async></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <Header currentPage="/what-can-i-ship/" />
+  <main id="main">
+    <section class="band band--surface">
+      <div class="wrap band__inner stack">
+        <p class="eyebrow">Before you ship</p>
+        <h1 class="h1">What you can ship, and what to check first.</h1>
+        <p class="lead measure">A short guide to what we handle, what to ask us about first, and the goods Nigeria does not allow in.</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap band__inner">
+        <div class="grid grid--split rules-split">
+          <div class="stack">
+            <h2 class="h2">What we handle</h2>
+            <ul class="tick-list">
+              {handled.map(item => (
+                <li><span class="tick" aria-hidden="true">&#10003;</span><span>{item}</span></li>
+              ))}
+            </ul>
+          </div>
+          <div class="stack">
+            <h2 class="h2">Ask us before you book</h2>
+            <p class="muted">Restricted goods, hazardous materials and high-value items: contact the office before booking. Customs rules on both sides of the route affect what can be imported and exported, and they vary by destination country.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band--surface">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">Goods Nigeria does not allow in</h2>
+          <p class="muted measure">Nigeria keeps an import prohibition list. These are some of the categories that most often catch people who buy to resell:</p>
+        </div>
+        <ul class="rules measure">
+          {prohibited.map(item => <li>{item}</li>)}
+        </ul>
+        <div class="stack stack--tight measure">
+          <p>Used vehicles: an age limit applies. Confirm it with the office before you buy a vehicle.</p>
+          <p class="muted">This is a summary and rules change. The official lists are the ones that count:</p>
+          <ul class="source-list">
+            {officialLists.map(link => (
+              <li><a href={link.href} rel="noopener">{link.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band--navy">
+      <div class="wrap band__inner">
+        <div class="stack stack--tight">
+          <h2 class="h2">Not sure about an item?</h2>
+          <p class="body-sm">Message the office on WhatsApp before you buy.</p>
+        </div>
+        <div class="btn-row">
+          {WHATSAPP_LINES.map((line, i) => (
+            <a class={i === 0 ? 'btn btn--primary' : 'btn btn--secondary'} href={line.href}><ContactLine line={line} /></a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</body>
+</html>
+
+<style>
+  .rules-split { align-items: start; }
+
+  .rules {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--brand-space-3);
+  }
+  .rules li {
+    display: grid;
+    grid-template-columns: var(--brand-space-4) 1fr;
+    gap: var(--brand-space-2);
+    align-items: start;
+    color: var(--brand-muted);
+  }
+  .rules li::before {
+    content: "";
+    width: var(--brand-space-2);
+    height: var(--brand-space-2);
+    margin-block-start: calc(var(--brand-space-1) * 3);
+    background: var(--brand-primary);
+    border-radius: var(--brand-radius-xs);
+  }
+
+  .source-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--brand-space-2);
+    font-size: var(--brand-text-body-sm-size);
+    line-height: var(--brand-text-body-sm-leading);
+  }
+
+  /* The secondary button is drawn for light bands; on the navy band its ink and
+     border would disappear. Lighten both so the second WhatsApp line is legible. */
+  .band--navy .btn--secondary { border-color: var(--brand-dark-surface-link); color: var(--brand-neutral-0); }
+  .band--navy .btn--secondary:hover,
+  .band--navy .btn--secondary:active { border-color: var(--brand-neutral-0); color: var(--brand-neutral-0); }
+</style>
