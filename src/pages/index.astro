@@ -1,6 +1,7 @@
 ---
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import Favicons from '../components/layout/Favicons.astro';
 import AnswerBand from '../components/bands/AnswerBand.astro';
 import QuotePromptBand from '../components/bands/QuotePromptBand.astro';
 import ServiceCard from '../components/bands/ServiceCard.astro';
@@ -44,6 +45,7 @@ const faqs = [
   <link rel="preload" href="/fonts/roboto-slab-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/roboto-400-500-600.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/fonts/fonts.css">
+  <Favicons />
   <script is:inline src="https://embed.tawk.to/6aa967c3d1963a3449b3b83e/default" async></script>
 </head>
 <body>
