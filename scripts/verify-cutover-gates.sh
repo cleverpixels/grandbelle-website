@@ -208,4 +208,47 @@ else
   fail "G13-what-can-i-ship-not-in-sitemap ($smchild)"
 fi
 
+# G14 favicon set (owner request 2026-11-03, card t_ba07fbbe). Every page links the
+# GrandBelle icons in its <head>; the icons and manifest are served, and the served
+# /favicon.ico is not the stock Astro one. The 404 page is reached through a missing
+# path because Pages serves dist/404.html there. The stock Astro ico is pinned by
+# sha256 (measured on main@ef478bf) and cross-checked against origin/main while that
+# ref still carries it, so this gate keeps working after the branch merges.
+STOCK_ICO_SHA256=09d2ac08d8cca9b6e1f90221f345a8c4dd0371c64a0dc52b6f96fc589b1e3d67
+fav_missing=""
+for p in / /about/ /get-a-quote/ /shipping-a-car/ /track/ /shop-and-ship/ /what-can-i-ship/ /no-such-page-favicon; do
+  body=$(curl -sL -m 30 "$BASE$p")
+  printf '%s' "$body" | grep -q 'rel="icon"' || fav_missing="$fav_missing $p:icon"
+  printf '%s' "$body" | grep -q 'rel="apple-touch-icon"' || fav_missing="$fav_missing $p:apple-touch"
+  printf '%s' "$body" | grep -q 'rel="manifest"' || fav_missing="$fav_missing $p:manifest"
+done
+if [ -z "$fav_missing" ]; then pass G14-pages-link-icons; else fail "G14-pages-link-icons on:$fav_missing"; fi
+
+ico_status=$(curl -s -m 30 -o "$T/gate-favicon.ico" -w '%{http_code}' "$BASE/favicon.ico")
+ico_type=$(curl -sI -m 30 "$BASE/favicon.ico" | awk 'tolower($1)=="content-type:"{print $2; exit}' | tr -d '\r')
+if [ "$ico_status" = 200 ] && printf '%s' "$ico_type" | grep -qi '^image/'; then
+  pass "G14-favicon-ico ($ico_type)"
+else
+  fail "G14-favicon-ico status=$ico_status type=$ico_type"
+fi
+ico_now=$(sha256sum "$T/gate-favicon.ico" | cut -d' ' -f1)
+repo_root=$(cd "$(dirname "$0")/.." && pwd)
+ico_main=""
+if git -C "$repo_root" rev-parse --verify -q origin/main >/dev/null 2>&1; then
+  ico_main=$(git -C "$repo_root" show origin/main:public/favicon.ico 2>/dev/null | sha256sum | cut -d' ' -f1)
+fi
+if [ -n "$ico_main" ] && [ "$ico_main" != "$ico_now" ] && [ "$ico_main" != "$STOCK_ICO_SHA256" ]; then
+  fail "G14-favicon-pin-drift origin/main=$ico_main pinned=$STOCK_ICO_SHA256"
+elif [ "$ico_now" != "$STOCK_ICO_SHA256" ]; then
+  pass G14-favicon-not-stock-astro
+else
+  fail "G14-favicon-is-stock-astro sha256=$ico_now"
+fi
+for f in /favicon-32x32.png /favicon-16x16.png /apple-touch-icon.png /icon-192.png /site.webmanifest; do
+  c=$(curl -s -m 30 -o /dev/null -w '%{http_code}' "$BASE$f")
+  if [ "$c" = 200 ]; then pass "G14-asset $f"; else fail "G14-asset $f status=$c"; fi
+done
+c=$(curl -s -m 30 -o /dev/null -w '%{http_code}' "$BASE/favicon.svg")
+if [ "$c" = 404 ]; then pass G14-favicon-svg-404; else fail "G14-favicon-svg status=$c"; fi
+
 exit $failed
