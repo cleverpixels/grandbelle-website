@@ -16,13 +16,14 @@
  * --------
  * PHONE_LINES_LIVE is false while the phone lines are down. Set it to true
  * when they work again: the Support line returns exactly as it was (same
- * label, same `tel:` href) on every page, and the two WhatsApp lines stay,
+ * label, same `tel:` href) on every page, and the WhatsApp line stays,
  * because a customer can still reach the office on WhatsApp. Nothing else
  * needs editing — every page reads this file.
  *
- * The WhatsApp numbers are the owner's, given 2026-11-03, and are written
- * here verbatim. Do not reformat or "correct" them. The primary was already
- * on the site; the secondary is new.
+ * The WhatsApp number is the owner's, given 2026-11-03, and is written here
+ * verbatim. Do not reformat or "correct" it. It is the only WhatsApp line: the
+ * second number carried during the 2026-11 telephone outage was retired by the
+ * owner on 2026-11-10 and must never reach a customer.
  *
  * NOT IN THIS FILE, DELIBERATELY
  * ------------------------------
@@ -31,8 +32,8 @@
  * See the card for the list of its places.
  */
 
-/** False while the US telephone lines are down (owner, 2026-11-03). */
-export const PHONE_LINES_LIVE = false;
+/** True now that the US telephone lines work again (owner, 2026-11-10). */
+export const PHONE_LINES_LIVE = true;
 
 /** The US support line, shown again the moment PHONE_LINES_LIVE is true. */
 export const SUPPORT_PHONE = {
@@ -43,32 +44,25 @@ export const SUPPORT_PHONE = {
 };
 
 /**
- * The two WhatsApp lines, in the order they should be shown.
+ * The WhatsApp line.
  * `display` is the number as a person reads it; `label` prefixes it with
  * "WhatsApp" for links that need to say how you reach it.
  */
 export const WHATSAPP_LINES = [
   {
-    role: 'primary',
+    role: null,
     display: '+1 (347) 712-8862',
     label: 'WhatsApp +1 (347) 712-8862',
     href: 'https://wa.me/13477128862',
   },
-  {
-    role: 'secondary',
-    display: '+1 (516) 554-2016',
-    label: 'WhatsApp +1 (516) 554-2016',
-    href: 'https://wa.me/15165542016',
-  },
 ];
 
 export const WHATSAPP_PRIMARY = WHATSAPP_LINES[0];
-export const WHATSAPP_SECONDARY = WHATSAPP_LINES[1];
 
 /**
  * The ordered list every contact block (header drawer, footer, About card,
- * answer band) renders: the WhatsApp lines while the phones are down, and
- * the Support line ahead of them once they are back. Nothing is ever
+ * answer band) renders: the WhatsApp line while the phones are down, and
+ * the Support line ahead of it once they are back. Nothing is ever
  * removed from this list by the flag.
  */
 export const CONTACT_LINES = PHONE_LINES_LIVE
@@ -83,13 +77,15 @@ export function lineLabel(line) {
 /**
  * The same label split into the parts a narrow column must break BETWEEN.
  *
- * "WhatsApp +1 (516) 554-2016 (secondary)" broke inside the number at 390 px
- * because a browser treats the hyphen in "554-2016" as a line-break
- * opportunity, leaving "554-" on one line. `number` is therefore rendered
- * inside <span class="phone-num"> (white-space: nowrap, see global.css) and
- * only `lead` and `role` are allowed to wrap onto their own lines. Derive the
- * lead from `label` rather than hard-coding it so the Support line, which
- * comes back when PHONE_LINES_LIVE is true, carries "Support" with no edit.
+ * A number must never break mid-number: a browser treats the hyphen in
+ * "256-5666" as a line-break opportunity, leaving the tail on the next line.
+ * `number` is therefore rendered inside <span class="phone-num">
+ * (white-space: nowrap, see global.css) and only `lead` and `role` are allowed
+ * to wrap onto their own lines. `role` is null on every surviving line, so
+ * today only `lead` wraps; the field stays because it is what a labelled
+ * second line would use. Derive the lead from `label` rather than hard-coding
+ * it so the Support line, which comes back when PHONE_LINES_LIVE is true,
+ * carries "Support" with no edit.
  */
 export function lineParts(line) {
   const lead = line.label.endsWith(line.display)
