@@ -856,7 +856,7 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
 }
 .nav__support:hover { color: var(--brand-primary); }
 /* Header bar contact slot while the phones are down (see src/data/contact.js):
-   the two WhatsApp lines stack in one column so the pair is no wider than a
+   the WhatsApp line sits in one column so the slot is no wider than a
    single number and cannot push the nav links or the quote button onto a
    second row at 1440px. */
 .nav__support--lines {
@@ -866,11 +866,11 @@ a:focus-visible { outline: none; box-shadow: var(--brand-shadow-focus); }
 .nav__support--lines a { color: inherit; text-decoration: none; white-space: nowrap; }
 .nav__support--lines a:hover { color: var(--brand-primary); }
 /* A telephone number is one unbreakable word. Browsers treat the hyphen in
-   "554-2016" as a break opportunity, which split the secondary WhatsApp
-   number inside the 390px drawer. Every number on the site is rendered inside
-   .phone-num; the introducing word ("WhatsApp", "Support") and the
-   "(primary)"/"(secondary)" label around it may still wrap. See
-   src/data/contact.js lineParts() and src/components/ContactLine.astro. */
+   "256-5666" as a break opportunity, which split a WhatsApp number inside the
+   390px drawer. Every number on the site is rendered inside .phone-num; the
+   introducing word ("WhatsApp", "Support") and any role label around it may
+   still wrap. See src/data/contact.js lineParts() and
+   src/components/ContactLine.astro. */
 .phone-num { white-space: nowrap; }
 .drawer { flex: 1 1 auto; margin-left: auto; }
 .header__action { display: none; flex: 0 0 auto; white-space: nowrap; }

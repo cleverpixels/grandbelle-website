@@ -9,7 +9,6 @@ import {
   PHONE_LINES_LIVE,
   SUPPORT_PHONE,
   WHATSAPP_PRIMARY,
-  WHATSAPP_SECONDARY,
 } from '../data/contact.js';
 ---
 <!DOCTYPE html>
@@ -37,10 +36,8 @@ import {
           <a class="btn btn--primary" href={WHATSAPP_PRIMARY.href}><ContactLine line={WHATSAPP_PRIMARY} /></a>
           <a class="btn btn--secondary" href={EMAIL.href}>Email {EMAIL.display}</a>
         </div>
-        {PHONE_LINES_LIVE ? (
+        {PHONE_LINES_LIVE && (
           <p class="body-sm muted">Or call Support <span class="phone-num">{SUPPORT_PHONE.display}</span>.</p>
-        ) : (
-          <p class="body-sm muted">Also on WhatsApp: <a href={WHATSAPP_SECONDARY.href}><span class="phone-num">{WHATSAPP_SECONDARY.display}</span></a> (secondary).</p>
         )}
       </div>
     </section>

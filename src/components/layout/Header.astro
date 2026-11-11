@@ -4,7 +4,6 @@ import {
   PHONE_LINES_LIVE,
   SUPPORT_PHONE,
   WHATSAPP_PRIMARY,
-  WHATSAPP_SECONDARY,
   lineLabel,
 } from '../../data/contact.js';
 import ContactLine from '../ContactLine.astro';
@@ -66,7 +65,6 @@ const ariaCurrent = (href: string) => (href === currentPage ? 'page' : undefined
     ) : (
       <span class="nav__support nav__support--lines">
         <a href={WHATSAPP_PRIMARY.href}>{lineLabel(WHATSAPP_PRIMARY)}</a>
-        <a href={WHATSAPP_SECONDARY.href}>{lineLabel(WHATSAPP_SECONDARY)}</a>
       </span>
     )}
     <a class="btn btn--primary header__action" href={QUOTE_HREF}>Get a quote</a>

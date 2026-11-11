@@ -120,19 +120,24 @@ done
 if [ -z "$g10b" ]; then pass G10b-staff-dashboard-404; else fail "G10b-staff-dashboard-not-404 on:$g10b"; fi
 
 # G11 /shop-and-ship/ replaces the live WordPress /shop-ship-with-grandbelle/:
-# a real page with the two offers, the Valley Stream address and both WhatsApp
-# lines, and none of the things the old page carried that must not survive —
-# an enquiry form, the dead +1 (516) 256-5666 line, or the "anywhere in the
-# world" claim (the corridor is the United States to Nigeria and West Africa).
+# a real page with the two offers, the Valley Stream address and the single
+# WhatsApp line, and none of the things the old page carried that must not
+# survive — an enquiry form, the retired +1 (516) 554-2016 line, or the
+# "anywhere in the world" claim (the corridor is the United States to Nigeria
+# and West Africa). The US support line +1 (516) 256-5666 is live again
+# (owner, 2026-11-10), so it must be PRESENT here, not absent as it was while
+# the phones were down.
 SHOP_PATH=/shop-and-ship/
 shop_code=$(curl -s -m 30 -o "$T/gate-shop.html" -w '%{http_code}' "$BASE$SHOP_PATH")
 if [ "$shop_code" = 200 ]; then pass G11-shop-and-ship-200; else fail "G11-shop-and-ship status=$shop_code"; fi
 if grep -q 'Hook Creek' "$T/gate-shop.html"; then pass G11-shop-address; else fail G11-shop-address-missing; fi
-for w in wa.me/13477128862 wa.me/15165542016; do
+for w in wa.me/13477128862; do
   if grep -q "$w" "$T/gate-shop.html"; then pass "G11-shop-whatsapp $w"; else fail "G11-shop-whatsapp missing $w"; fi
 done
+if grep -q 'wa.me/15165542016' "$T/gate-shop.html"; then fail G11-shop-retired-whatsapp; else pass G11-shop-no-retired-whatsapp; fi
 if grep -q '<form' "$T/gate-shop.html"; then fail G11-shop-has-form; else pass G11-shop-no-form; fi
-if grep -q '256-5666' "$T/gate-shop.html"; then fail G11-shop-dead-number; else pass G11-shop-no-dead-number; fi
+if grep -q '256-5666' "$T/gate-shop.html"; then pass G11-shop-support-line; else fail G11-shop-support-line-missing; fi
+if grep -q '554-2016' "$T/gate-shop.html"; then fail G11-shop-retired-number; else pass G11-shop-no-retired-number; fi
 if grep -qi 'anywhere in the world' "$T/gate-shop.html"; then fail G11-shop-anywhere-claim; else pass G11-shop-no-anywhere-claim; fi
 # The sitemap integration writes sitemap-index.xml pointing at sitemap-0.xml.
 # The <loc> there is absolute (the canonical site URL), so take the file name
@@ -180,7 +185,8 @@ fi
 # G13 /what-can-i-ship/ states what may and may not be shipped, sourced only from
 # the documented rules (Tawk KB article 13 and the sourcing guide): the five
 # categories we handle, both official list URLs, and neither an enquiry form nor
-# the dead +1 (516) 256-5666 line. /shop-and-ship/ must link to it.
+# the retired +1 (516) 554-2016 line. The support line +1 (516) 256-5666 is live
+# again (owner, 2026-11-10) and is expected here. /shop-and-ship/ must link to it.
 RULES_PATH=/what-can-i-ship/
 rules_code=$(curl -s -m 30 -o "$T/gate-rules.html" -w '%{http_code}' "$BASE$RULES_PATH")
 if [ "$rules_code" = 200 ]; then pass G13-what-can-i-ship-200; else fail "G13-what-can-i-ship status=$rules_code"; fi
@@ -196,7 +202,8 @@ for w in \
   if grep -qF "$w" "$T/gate-rules.html"; then pass "G13-handles $w"; else fail "G13-handles missing $w"; fi
 done
 if grep -q '<form' "$T/gate-rules.html"; then fail G13-has-form; else pass G13-no-form; fi
-if grep -q '256-5666' "$T/gate-rules.html"; then fail G13-dead-number; else pass G13-no-dead-number; fi
+if grep -q '256-5666' "$T/gate-rules.html"; then pass G13-support-line; else fail G13-support-line-missing; fi
+if grep -q '554-2016' "$T/gate-rules.html"; then fail G13-retired-number; else pass G13-no-retired-number; fi
 if grep -qF 'href="/what-can-i-ship/"' "$T/gate-shop.html"; then
   pass G13-linked-from-shop-and-ship
 else
@@ -250,5 +257,21 @@ for f in /favicon-32x32.png /favicon-16x16.png /apple-touch-icon.png /icon-192.p
 done
 c=$(curl -s -m 30 -o /dev/null -w '%{http_code}' "$BASE/favicon.svg")
 if [ "$c" = 404 ]; then pass G14-favicon-svg-404; else fail "G14-favicon-svg status=$c"; fi
+
+# G15 exactly one WhatsApp button (owner ruling 2026-11-10, card t_7e7052c1).
+# /shop-and-ship/ and /what-can-i-ship/ both map WHATSAPP_LINES, which now holds a
+# single entry. The pair of buttons they drew must collapse to exactly one, with no
+# empty second button left behind and no second number anywhere on either page.
+g15=""
+for p in "$SHOP_PATH" "$RULES_PATH"; do
+  body=$(curl -sL -m 30 "$BASE$p")
+  n=$(printf '%s' "$body" | grep -o 'class="btn btn--primary" href="https://wa.me/13477128862"' | wc -l | tr -d ' ')
+  e=$(printf '%s' "$body" | grep -oE 'class="btn btn--secondary" href="https://wa\.me/[0-9]+"' | wc -l | tr -d ' ')
+  r=$(printf '%s' "$body" | grep -c '554-2016')
+  [ "$n" = 1 ] || g15="$g15 $p:whatsapp-buttons=$n"
+  [ "$e" = 0 ] || g15="$g15 $p:empty-second-button=$e"
+  [ "$r" = 0 ] || g15="$g15 $p:retired-number=$r"
+done
+if [ -z "$g15" ]; then pass G15-one-whatsapp-button; else fail "G15-one-whatsapp-button on:$g15"; fi
 
 exit $failed
